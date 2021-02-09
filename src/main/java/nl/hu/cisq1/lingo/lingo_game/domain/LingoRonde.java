@@ -36,12 +36,12 @@ public class LingoRonde {
             if (resultaten.contains(Resultaat.CORRECT)){
                 woord1.set(i,woord.getValue().charAt(i));
             }
-            else {woord1.set(i,null);}
+            else {woord1.set(i,' ');}
 
         }
 
 
-        return null;
+        return woord1;
     }
 
 
