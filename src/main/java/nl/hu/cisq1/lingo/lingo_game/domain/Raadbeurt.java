@@ -6,39 +6,43 @@ import org.apache.coyote.Request;
 import java.util.ArrayList;
 
 public class Raadbeurt {
-    public Raadbeurt(String ingev_woord){
-        this.ingev_woord=ingev_woord;
-        respons=null;
-        Word woord=new Word(ingev_woord);
-        compare(woord);
-    }
-
     private String ingev_woord ;
     private ArrayList<Resultaat> respons;
 
-    private void compare(Word woord){
+    public Raadbeurt(String ingev_woord){
+        this.ingev_woord=ingev_woord;
+        respons=new ArrayList<>();
+        Word woord=new Word(ingev_woord);
+        //compare(woord);
+    }
+
+
+    public void compare(Word woord){
             if (woord.getLength()!=ingev_woord.length()){
 
-                for (int i = 0; i <ingev_woord.length()-1 ; i++) {
+                for (int i = 0; i <ingev_woord.length() ; i++) {
                     respons.add(Resultaat.INVALID);
 
                 }
             }
             else{
+                //System.out.println(ingev_woord);
+                //System.out.println(woord.getValue());
 
-                for (int i = 0; i <ingev_woord.length()-1 ; i++) {
+                for (int i = 0; i <ingev_woord.length() ; i++) {
+                    //System.out.println(i);
                     char character=ingev_woord.charAt(i);
 
                     if(woord.getValue().contains(String.valueOf(character))){
 
                         if(character==woord.getValue().charAt(i)){
-                            respons.set(i,Resultaat.CORRECT);
+                            respons.add(Resultaat.CORRECT);
                         }
 
-                        else  {respons.set(i,Resultaat.PRESENT);}
+                        else  {respons.add(Resultaat.PRESENT);}
                     }
 
-                    else {respons.set(i,Resultaat.ABSENT);}
+                    else {respons.add(Resultaat.ABSENT);}
                 }
             }
     }
