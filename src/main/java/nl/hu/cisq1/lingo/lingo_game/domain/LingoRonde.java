@@ -4,6 +4,7 @@ import nl.hu.cisq1.lingo.words.domain.Word;
 
 import java.util.ArrayList;
 
+
 public class LingoRonde {
     private boolean voltooid;
     private ArrayList<Character> revealedWord;
