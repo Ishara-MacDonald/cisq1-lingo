@@ -32,7 +32,8 @@ Scenario: Start New Round
     Then I cannot start a new round
 
   Scenario Outline: Guess a Word
-    Given I'm given the first letter of a word
+    Given A Game is Active
+    And I'm given the first letter of a word
     When I guess the word "<guess>"
     And the correct word is "<word>"
     Then I should see "<feedback>" as feedback
@@ -42,6 +43,7 @@ Scenario: Start New Round
       | cat  | dog   |        absent, absent, absent       |
       | cat  | cash  |  invalid, invalid, invalid, invalid |
       | cat  | act   |       present, present, correct     |
+      | cat  | tad   |       present, correct, absent      |
       | cat  | cat   |       correct, correct, correct     |
 
     # Failure Path
