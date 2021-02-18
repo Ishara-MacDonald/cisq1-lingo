@@ -4,9 +4,13 @@ import java.util.List;
 import java.util.Objects;
 
 public class Feedback {
+    private String attempt;
+    private int maxLengthWord;
     private List<Mark> marks;
 
-    public Feedback(List<Mark> marks) {
+    public Feedback(String attempt, int maxLengthWord, List<Mark> marks) {
+        this.attempt = attempt;
+        this.maxLengthWord = maxLengthWord;
         this.marks = marks;
     }
 
@@ -16,6 +20,10 @@ public class Feedback {
                 return false;
         }
         return true;
+    }
+
+    public boolean isWordValid(){
+        return attempt.length() == maxLengthWord;
     }
 
     @Override
