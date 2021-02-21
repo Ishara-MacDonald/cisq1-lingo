@@ -1,38 +1,42 @@
 package nl.hu.cisq1.lingo.trainer.domain;
 
+import java.awt.image.AreaAveragingScaleFilter;
 import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.List;
 import java.util.Objects;
 
 public class Feedback {
-    private String attempt;
-    private String word;
-    private List<Mark> marks;
-    private List<Hint> hints;
+    private String lastAttempt;
+    private List<String> attempts = new ArrayList<>();
+    private final String word;
+    private List<Mark> marks = new ArrayList<>();
+    private Hint hint = new Hint();
 
-    public Feedback(String attempt, String word) {
-        this.attempt = attempt.toUpperCase();
+    public Feedback(String word) {
         this.word = word.toUpperCase();
-        hints = new ArrayList<>();
-        marks = new ArrayList<>();
     }
 
-    public List<Hint> getHints(){
-        return hints;
+    public Hint getHint(){
+        return hint;
     }
-
-    public void setMarks(List<Mark> marks){
-        this.marks = marks;
-    }
-
     public List<Mark> getMarks(){
         return marks;
     }
 
+    public void setMarks(List<Mark> marks){ this.marks = marks; }
+
+    public void addAttempt(String attempt){
+        this.lastAttempt = attempt.toUpperCase();
+        attempts.add(attempt.toUpperCase());
+        generateMarks();
+        giveHint();
+    }
+
     public void generateMarks(){
+        marks.clear();
         if(isWordValid()){
-            String[] splitGuess = attempt.split("");
+            String[] splitGuess = lastAttempt.split("");
             int counter = 0;
 
             for(String letter: splitGuess){
@@ -71,33 +75,10 @@ public class Feedback {
     }
 
     public boolean isWordValid(){
-        return attempt.length() == word.length();
+        return lastAttempt.length() == word.length();
     }
 
-    public Hint giveHint(){
-        Hint hint = new Hint();
-        hint.setHints(hint.processFeedbackIntoHints(marks, word));
-        hints.add(hint);
-        return hint;
-    }
-
-    @Override
-    public boolean equals(Object o) {
-        if (this == o) return true;
-        if (o == null || getClass() != o.getClass()) return false;
-        Feedback feedback = (Feedback) o;
-        return Objects.equals(marks, feedback.marks);
-    }
-
-    @Override
-    public int hashCode() {
-        return Objects.hash(marks);
-    }
-
-    @Override
-    public String toString() {
-        return "Feedback{" +
-                "marks=" + marks +
-                '}';
+    public void giveHint(){
+        hint.processFeedbackIntoHints(marks, hint, word);
     }
 }

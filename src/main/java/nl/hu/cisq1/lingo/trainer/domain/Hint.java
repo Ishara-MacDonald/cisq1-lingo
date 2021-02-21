@@ -6,9 +6,7 @@ import java.util.List;
 import java.util.Objects;
 
 public class Hint {
-    private List<String> hints;
-    private String hintedLetter;
-    private String wordToGuess;
+    private List<String> hints = new ArrayList<>();
 
     public Hint(){}
 
@@ -20,27 +18,32 @@ public class Hint {
         this.hints = hints;
     }
 
-    public List<String> processFeedbackIntoHints(List<Mark> feedback, String wordToGuess){
-        List<String> listOfLettersOfWord = new ArrayList<String>(Arrays.asList(wordToGuess.split("")));
-        List<String> hints = new ArrayList<>();
+    public List<String> getHints(){return hints;}
+
+    public void processFeedbackIntoHints(List<Mark> marks, Hint hint, String wordToGuess){
+        List<String> listOfLettersOfWord = new ArrayList<>(Arrays.asList(wordToGuess.split("")));
+        List<String> hintPerLetter = new ArrayList<>();
+
+        boolean isFirstHint = hint.getHints().isEmpty();
         int counter = 0;
 
-        for(Mark mark : feedback){
-            if(mark == Mark.CORRECT){
-                hints.add(listOfLettersOfWord.get(counter));
-            }else
-                hints.add(".");
+        for(Mark mark : marks){
+            if(mark == Mark.CORRECT)
+                hintPerLetter.add(listOfLettersOfWord.get(counter));
+            else if(!isFirstHint)
+                hintPerLetter.add(getHints().get(counter));
+            else
+                hintPerLetter.add(".");
+
             counter++;
         }
-        return hints;
+        hints = hintPerLetter;
     }
 
     @Override
     public String toString() {
         return "Hint{" +
                 "hints=" + hints +
-                ", hintedLetter='" + hintedLetter + '\'' +
-                ", wordToGuess='" + wordToGuess + '\'' +
                 '}';
     }
 
@@ -49,13 +52,11 @@ public class Hint {
         if (this == o) return true;
         if (o == null || getClass() != o.getClass()) return false;
         Hint hint = (Hint) o;
-        return Objects.equals(hints, hint.hints) &&
-                Objects.equals(hintedLetter, hint.hintedLetter) &&
-                Objects.equals(wordToGuess, hint.wordToGuess);
+        return Objects.equals(hints, hint.hints);
     }
 
     @Override
     public int hashCode() {
-        return Objects.hash(hintedLetter);
+        return Objects.hash(hints);
     }
 }
