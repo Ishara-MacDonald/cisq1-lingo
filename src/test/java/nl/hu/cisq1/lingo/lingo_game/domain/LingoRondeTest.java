@@ -60,7 +60,7 @@ class LingoRondeTest {
         assertTrue(lingoRonde.checkoltooid());
     }
     @Test
-    @DisplayName("round is done when the player tred 5 times")
+    @DisplayName("round is done when the player tried 5 times")
     void checklessthan5tries(){
         LingoRonde lingoRonde=new LingoRonde(woord);
         lingoRonde.addRaadBeurt(woordTest2);

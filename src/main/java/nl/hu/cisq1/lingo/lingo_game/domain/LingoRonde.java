@@ -44,13 +44,13 @@ public class LingoRonde {
     public ArrayList<Character>calcWord(){
         ArrayList<Character> woord1=new ArrayList<>();
         for (int i = 0; i < woord.getLength() ; i++) {
-            ArrayList<Resultaat>resultaten=new ArrayList<>();
+            ArrayList<Mark>resultaten=new ArrayList<>();
             for (Raadbeurt raadbeurt:raadbeurts) {
-                Resultaat resultaat1= raadbeurt.getRespons().get(i);
-                resultaten.add(resultaat1);
+                Mark mark1 = raadbeurt.getRespons().get(i);
+                resultaten.add(mark1);
 
             }
-            if (resultaten.contains(Resultaat.CORRECT)){
+            if (resultaten.contains(Mark.CORRECT)){
                 woord1.add(woord.getValue().charAt(i));
             }
             else {
