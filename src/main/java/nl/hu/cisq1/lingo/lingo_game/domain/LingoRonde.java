@@ -2,19 +2,30 @@ package nl.hu.cisq1.lingo.lingo_game.domain;
 
 import nl.hu.cisq1.lingo.words.domain.Word;
 
+import javax.persistence.Column;
+import javax.persistence.Entity;
+import javax.persistence.Id;
+import javax.persistence.ManyToOne;
 import java.util.ArrayList;
 
-
+@Entity(name = "lingoronde")
 public class LingoRonde {
+    @Column(name = "word")
     private Word woord;
+    @ManyToOne
     private ArrayList<Raadbeurt>raadbeurts;
-
+    @Id
+    private Long id;
 
 
     public LingoRonde(Word woord){
         this.woord=woord;
         raadbeurts=new ArrayList<>();
     }
+
+    public LingoRonde() {
+    }
+
     private int countTries(){return  raadbeurts.size();}
 
     public int berekenPunten(){
@@ -61,6 +72,14 @@ public class LingoRonde {
         return woord1;
     }
 
+    public void setWoord(Word woord) {
+        this.woord = woord;
+    }
+
+    public void setRaadbeurts(ArrayList<Raadbeurt> raadbeurts) {
+        this.raadbeurts = raadbeurts;
+    }
+
     public Word getWoord() {
         return woord;
     }
@@ -69,4 +88,11 @@ public class LingoRonde {
         return raadbeurts;
     }
 
+    public void setId(Long id) {
+        this.id = id;
+    }
+
+    public Long getId() {
+        return id;
+    }
 }

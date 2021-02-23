@@ -2,11 +2,19 @@ package nl.hu.cisq1.lingo.lingo_game.domain;
 
 import nl.hu.cisq1.lingo.words.domain.Word;
 
+import javax.persistence.Column;
+import javax.persistence.Entity;
+import javax.persistence.Id;
 import java.util.ArrayList;
 
+@Entity(name = "raadbeurt")
 public class Raadbeurt {
+
+    @Column(name = "woord")
     private String ingev_woord ;
     private ArrayList<Mark> respons;
+    @Id
+    private Long id;
 
     public Raadbeurt(String ingev_woord){
         this.ingev_woord=ingev_woord;
@@ -15,8 +23,12 @@ public class Raadbeurt {
         //compare(woord);
     }
 
+    public Raadbeurt() {
 
-    public void compare(Word woord){
+    }
+
+
+    public ArrayList<Mark> compare(Word woord){
             if (woord.getLength()!=ingev_woord.length()){
 
                 for (int i = 0; i <ingev_woord.length() ; i++) {
@@ -43,7 +55,7 @@ public class Raadbeurt {
 
                     else {respons.add(Mark.ABSENT);}
                 }
-            }
+            } return  respons;
     }
 
     public ArrayList<Mark> getRespons() {
@@ -52,5 +64,18 @@ public class Raadbeurt {
 
     public String getIngev_woord() {
         return ingev_woord;
+    }
+
+    public void setIngev_woord(String ingev_woord) {
+        this.ingev_woord = ingev_woord;
+    }
+
+    public void setId(Long id) {
+        this.id = id;
+    }
+
+    @Id
+    public Long getId() {
+        return id;
     }
 }
