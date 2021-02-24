@@ -1,5 +1,7 @@
 package nl.hu.cisq1.lingo.lingo_game.domain;
 
+import nl.hu.cisq1.lingo.lingo_game.domain.lingoRonde.LingoRonde;
+import nl.hu.cisq1.lingo.lingo_game.domain.raadBeurt.Raadbeurt;
 import nl.hu.cisq1.lingo.words.domain.Word;
 import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;
@@ -25,7 +27,7 @@ class LingoRondeTest {
         System.out.println(lingoRonde.calcWord());
         lingoRonde.addRaadBeurt(woord);
         for(Raadbeurt raadbeurt: lingoRonde.getRaadbeurts()){
-            System.out.println(raadbeurt.getRespons());
+            System.out.println(raadbeurt.compare(woord));
 
         }
         System.out.println(lingoRonde.berekenPunten());

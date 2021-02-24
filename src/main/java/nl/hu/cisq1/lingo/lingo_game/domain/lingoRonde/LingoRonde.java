@@ -1,19 +1,19 @@
-package nl.hu.cisq1.lingo.lingo_game.domain;
+package nl.hu.cisq1.lingo.lingo_game.domain.lingoRonde;
 
+import nl.hu.cisq1.lingo.lingo_game.domain.Mark;
+import nl.hu.cisq1.lingo.lingo_game.domain.raadBeurt.Raadbeurt;
 import nl.hu.cisq1.lingo.words.domain.Word;
 
-import javax.persistence.Column;
-import javax.persistence.Entity;
-import javax.persistence.Id;
-import javax.persistence.ManyToOne;
+import javax.persistence.*;
 import java.util.ArrayList;
+import java.util.List;
 
 @Entity(name = "lingoronde")
 public class LingoRonde {
-    @Column(name = "word")
-    private Word woord;
     @ManyToOne
-    private ArrayList<Raadbeurt>raadbeurts;
+    private Word woord;
+    @OneToMany
+    private List<Raadbeurt> raadbeurts;
     @Id
     private Long id;
 
@@ -47,8 +47,8 @@ public class LingoRonde {
     public void addRaadBeurt(Word woord1){
         if (countTries()!=5||!checkoltooid()){
             Raadbeurt raadbeurt=new Raadbeurt(woord1.getValue());
-            raadbeurt.compare(woord);
             raadbeurts.add(raadbeurt);
+            //raadbeurts.add(raadbeurt.compare(woord));
         }
 
     }
@@ -57,9 +57,8 @@ public class LingoRonde {
         for (int i = 0; i < woord.getLength() ; i++) {
             ArrayList<Mark>resultaten=new ArrayList<>();
             for (Raadbeurt raadbeurt:raadbeurts) {
-                Mark mark1 = raadbeurt.getRespons().get(i);
+                Mark mark1 = raadbeurt.compare(woord).get(i);
                 resultaten.add(mark1);
-
             }
             if (resultaten.contains(Mark.CORRECT)){
                 woord1.add(woord.getValue().charAt(i));
@@ -84,7 +83,7 @@ public class LingoRonde {
         return woord;
     }
 
-    public ArrayList<Raadbeurt> getRaadbeurts() {
+    public List<Raadbeurt> getRaadbeurts() {
         return raadbeurts;
     }
 
