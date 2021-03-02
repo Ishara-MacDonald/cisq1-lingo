@@ -14,10 +14,6 @@ public class Hint {
         this.hints = hints;
     }
 
-    public void setHints(List<String> hints){
-        this.hints = hints;
-    }
-
     public List<String> getHints(){return hints;}
 
     public void processFeedbackIntoHints(List<Mark> marks, Hint hint, String wordToGuess){
@@ -28,12 +24,15 @@ public class Hint {
         int counter = 0;
 
         for(Mark mark : marks){
-            if(mark == Mark.CORRECT)
+            if(mark == Mark.CORRECT){
                 hintPerLetter.add(listOfLettersOfWord.get(counter));
-            else if(!isFirstHint)
+            }
+            else if(!isFirstHint) {
                 hintPerLetter.add(getHints().get(counter));
-            else
+            }
+            else {
                 hintPerLetter.add(".");
+            }
 
             counter++;
         }
