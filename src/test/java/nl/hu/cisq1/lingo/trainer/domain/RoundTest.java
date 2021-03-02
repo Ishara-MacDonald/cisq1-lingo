@@ -49,8 +49,8 @@ class RoundTest {
         assertEquals(3, round.getAllFeedback().size());
     }
 
-    // region Feedback and Marks
-    // Go to #FeedbackTest.java for more Feedback tests
+        // region Feedback and Marks
+        // Go to #FeedbackTest.java for more Feedback tests
     @Test
     @DisplayName("When adding a correct attempt, feedback gives back a correct mark")
     void correctAttemptGivesBackFeedback(){
@@ -71,9 +71,9 @@ class RoundTest {
         round.processAttempts("He");
         assertEquals(List.of(Mark.INVALID, Mark.INVALID, Mark.INVALID), round.getAllFeedback().get(0).getMarks());
     }
-    //endregion
+        //endregion
 
-    // region maxAttempts
+        // region maxAttempts
     @Test
     @DisplayName("There cannot be more attempts than the set maxAttempts")
     void maxAttemptsTest(){
@@ -85,16 +85,10 @@ class RoundTest {
         round.addAttempt("Hei");
         assertEquals(3, round.getAllFeedback().size());
     }
-    //endregion
+        //endregion maxAttempts
     //endregion allFeedback
 
     //region calculateScore()
-//    @Test
-//    @DisplayName("Using addScore(), score gets added to the currentScore")
-//    void addScoreTest(){
-//        round.calculateScore(1);
-//        assertEquals(1, round.getCurrentScore());
-//    }
 
     @Test
     @DisplayName("maxScore increases the more letter the player has to guess")
@@ -121,5 +115,5 @@ class RoundTest {
         round.processAttempts("Hey");
         assertTrue(round.getCurrentScore() < round.getMaxScore());
     }
-
+    //endregion
 }

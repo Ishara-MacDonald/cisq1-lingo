@@ -18,13 +18,16 @@ public class Round {
     private int penalty = 10;
     //endregion
 
-    // region attempts, word to Guess and Feedback
+    // region attempts, word to Guess
     private List<String> attempts = new ArrayList<>();
     private int maxAttempts = 1;
 
     private String wordToGuess = "";
+    //endregion
 
+    // region feedback and hints
     private List<Feedback> allFeedback = new ArrayList<>();
+    private List<Hint> hints = new ArrayList<>();
     //endregion
 
     //endregion
@@ -97,14 +100,18 @@ public class Round {
     }
 
     public void processAttempts(String attempt){
-        if(attempt.equals(wordToGuess)){
+        if(attempt.equals(wordToGuess))
             roundActive = false;
-        }else{
+        else
             calculateScore();
-        }
+
         Feedback feedback = new Feedback(wordToGuess, attempt);
-        feedback.processAttempt();
-        allFeedback.add(feedback);
+        if(!hints.isEmpty())
+            feedback.setLastHint(new Hint(hints.get(hints.size() -1).getHints()));
+
+        feedback.addAttempt( attempt );
+        allFeedback.add( feedback );
+        hints.add( feedback.getLastHint() );
     }
 
     public void calculateScore(){
@@ -121,5 +128,13 @@ public class Round {
 
     private void calculatePentalty(){
         penalty = maxScore / maxAttempts;
+    }
+
+    @Override
+    public String toString() {
+        return String.format(
+            "Round{ roundId: %s\nwordtoGuess: %s\nmaxAttempts: %s\nroundActive: %s\ncurrentScore: %s\nmaxScore: %s\nscorePerLetter: %s\npenalty: %s\nallFeedback:\n%s",
+            roundId, wordToGuess, maxAttempts, roundActive, currentScore, maxScore, scorePerLetter, penalty, allFeedback
+        );
     }
 }
