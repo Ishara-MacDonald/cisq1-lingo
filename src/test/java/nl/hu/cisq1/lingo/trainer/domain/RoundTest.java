@@ -119,7 +119,6 @@ class RoundTest {
         round.setMaxAttempts(5);
         round.processAttempts("oio");
         round.processAttempts("Hey");
-        System.out.println(round.getCurrentScore());
         assertTrue(round.getCurrentScore() < round.getMaxScore());
     }
 

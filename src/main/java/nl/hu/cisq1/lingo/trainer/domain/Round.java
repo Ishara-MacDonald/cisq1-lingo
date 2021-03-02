@@ -121,6 +121,5 @@ public class Round {
 
     private void calculatePentalty(){
         penalty = maxScore / maxAttempts;
-        System.out.println(penalty);
     }
 }
