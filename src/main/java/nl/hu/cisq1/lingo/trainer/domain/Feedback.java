@@ -1,10 +1,8 @@
 package nl.hu.cisq1.lingo.trainer.domain;
 
-import java.awt.image.AreaAveragingScaleFilter;
 import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.List;
-import java.util.Objects;
 
 public class Feedback {
     private String lastAttempt;

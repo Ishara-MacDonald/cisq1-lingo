@@ -1,8 +1,12 @@
 package nl.hu.cisq1.lingo.trainer.domain;
 
 import org.junit.jupiter.api.*;
+import org.junit.jupiter.params.ParameterizedTest;
+import org.junit.jupiter.params.provider.Arguments;
+import org.junit.jupiter.params.provider.MethodSource;
 
 import java.util.List;
+import java.util.stream.Stream;
 
 import static org.junit.jupiter.api.Assertions.*;
 
@@ -94,58 +98,26 @@ class FeedbackTest {
     //endregion
 
     //region Tests for Feedback.giveHint(): Generating Hints
-
-    @Test
-    @DisplayName("Hint gives letter at All Correct Marks")
-    void hintWithAllCorrectMarks(){
-        feedback.addAttempt("hallo");
-        Hint dummyHint = new Hint(List.of("H","A","L","L","O"));
-        assertEquals(dummyHint, feedback.getHint());
+    // word to guess is 'Hallo' ( see method setUp() )
+    @ParameterizedTest
+    @MethodSource({"provideHintExamples"})
+    @DisplayName("Hint gives Letter at Correct Marks")
+    void hintWithDifferentFeedback(List<String> attempts, List<String> expectedHint){
+        for(String attempt: attempts){
+            feedback.addAttempt(attempt);
+        }
+        assertEquals(new Hint(expectedHint), feedback.getHint());
     }
 
-    @Test
-    @DisplayName("Hint doesn't Give Letter at Absent Marks")
-    void hintWithAbsentMark(){
-        feedback.addAttempt("hellp");
-        Hint dummyHint = new Hint(List.of("H",".","L","L","."));
-        assertEquals(dummyHint, feedback.getHint());
-    }
-
-    @Test
-    @DisplayName("Hint doesn't Give Letter at Present Marks")
-    void hintWithPresentMark(){
-        feedback.addAttempt("halll");
-        Hint dummyHint = new Hint(List.of("H","A","L","L","."));
-        assertEquals(dummyHint, feedback.getHint());
-    }
-
-    @Test
-    @DisplayName("Hint when Mark is Invalid")
-    void hintWithInvalidMark(){
-        feedback.addAttempt("hal");
-        Hint dummyHint = new Hint(List.of(".",".",".",".","."));
-        assertEquals(dummyHint, feedback.getHint());
-    }
-
-    @Test
-    @DisplayName("Hint with Previous Hint")
-    void hintWithPreviousHint(){
-        feedback.addAttempt("heyoo");
-        feedback.addAttempt("shirt");
-
-        Hint dummyHint = new Hint(List.of("H",".",".",".","O"));
-        assertEquals(dummyHint, feedback.getHint());
-    }
-
-    @Test
-    @DisplayName("Hint after Multiple Attempts")
-    void hintWithMultipleHints(){
-        feedback.addAttempt("heyoo");
-        feedback.addAttempt("shirt");
-        feedback.addAttempt("HELLO");
-
-        Hint dummyHint = new Hint(List.of("H",".","L","L","O"));
-        assertEquals(dummyHint, feedback.getHint());
+    static Stream<Arguments> provideHintExamples(){
+        return Stream.of(
+                Arguments.of(List.of("hallo"), List.of("H","A","L","L","O")),
+                Arguments.of(List.of("hellp"), List.of("H",".","L","L",".")),
+                Arguments.of(List.of("halll"), List.of("H","A","L","L",".")),
+                Arguments.of(List.of("hal"), List.of(".",".",".",".",".")),
+                Arguments.of(List.of("heyoo","shirt"), List.of("H",".",".",".","O")),
+                Arguments.of(List.of("heyoo","shirt", "Hello"), List.of("H",".","L","L","O"))
+        );
     }
 
     //endregion
