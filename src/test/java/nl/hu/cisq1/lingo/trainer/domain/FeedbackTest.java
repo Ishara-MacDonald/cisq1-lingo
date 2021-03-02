@@ -106,7 +106,7 @@ class FeedbackTest {
         for(String attempt: attempts){
             feedback.addAttempt(attempt);
         }
-        assertEquals(new Hint(expectedHint), feedback.getHint());
+        assertEquals(new Hint(expectedHint), feedback.getLastHint());
     }
 
     static Stream<Arguments> provideHintExamples(){

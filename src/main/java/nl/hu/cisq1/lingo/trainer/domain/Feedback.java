@@ -8,21 +8,22 @@ public class Feedback {
     private String attempt;
     private final String word;
     private List<Mark> marks = new ArrayList<>();
-    private final Hint hint = new Hint();
+    private Hint lastHint = new Hint();
 
     public Feedback(String word, String attempt) {
         this.word = word.toUpperCase();
         this.attempt = attempt.toUpperCase();
     }
 
-    public Hint getHint(){
-        return hint;
+    public Hint getLastHint(){
+        return lastHint;
     }
     public List<Mark> getMarks(){
         return marks;
     }
 
     public void setMarks(List<Mark> marks){ this.marks = marks; }
+    public void setLastHint(Hint lastHint) { this.lastHint = lastHint; }
 
     public void processAttempt(){
         generateMarks();
@@ -32,6 +33,10 @@ public class Feedback {
     public void addAttempt(String attempt){
         this.attempt = attempt.toUpperCase();
         processAttempt();
+    }
+
+    public void giveHint(){
+        lastHint.processFeedbackIntoHints(marks, lastHint, word);
     }
 
     public void generateMarks(){
@@ -79,7 +84,8 @@ public class Feedback {
         return attempt.length() == word.length();
     }
 
-    public void giveHint(){
-        hint.processFeedbackIntoHints(marks, hint, word);
+    @Override
+    public String toString() {
+        return String.format("Feedback { marks: %s\nhint: %s}", marks, lastHint);
     }
 }
