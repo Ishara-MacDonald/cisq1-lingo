@@ -5,14 +5,14 @@ import java.util.Arrays;
 import java.util.List;
 
 public class Feedback {
-    private String lastAttempt;
-    private List<String> attempts = new ArrayList<>();
+    private String attempt;
     private final String word;
     private List<Mark> marks = new ArrayList<>();
-    private Hint hint = new Hint();
+    private final Hint hint = new Hint();
 
-    public Feedback(String word) {
+    public Feedback(String word, String attempt) {
         this.word = word.toUpperCase();
+        this.attempt = attempt.toUpperCase();
     }
 
     public Hint getHint(){
@@ -24,17 +24,20 @@ public class Feedback {
 
     public void setMarks(List<Mark> marks){ this.marks = marks; }
 
-    public void addAttempt(String attempt){
-        this.lastAttempt = attempt.toUpperCase();
-        attempts.add(attempt.toUpperCase());
+    public void processAttempt(){
         generateMarks();
         giveHint();
+    }
+
+    public void addAttempt(String attempt){
+        this.attempt = attempt.toUpperCase();
+        processAttempt();
     }
 
     public void generateMarks(){
         marks.clear();
         if(isWordValid()){
-            String[] splitGuess = lastAttempt.split("");
+            String[] splitGuess = attempt.split("");
             int counter = 0;
 
             for(String letter: splitGuess){
@@ -73,7 +76,7 @@ public class Feedback {
     }
 
     public boolean isWordValid(){
-        return lastAttempt.length() == word.length();
+        return attempt.length() == word.length();
     }
 
     public void giveHint(){

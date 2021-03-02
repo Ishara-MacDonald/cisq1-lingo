@@ -17,7 +17,7 @@ class FeedbackTest {
 
     @BeforeEach
     void setUp(){
-        feedback = new Feedback("Hallo");
+        feedback = new Feedback("Hallo", "");
     }
 
     //region Tests for isWordGuessed()
