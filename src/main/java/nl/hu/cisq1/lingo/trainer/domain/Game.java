@@ -27,19 +27,13 @@ public class Game {
 
     //region setters
 
-    public static void setNextGameId(Long nextGameId) { Game.nextGameId = nextGameId; }
+
     public static void setNextGameId(int nextGameId) { Game.nextGameId = (long) nextGameId; }
-    public void setGameStatus(GameStatus gameStatus) { this.gameStatus = gameStatus;}
-    public void setTotalScore(Long totalScore) { this.totalScore = totalScore; }
     public void setRounds(List<Round> rounds) { this.rounds = rounds; }
-    public void setGameId(Long gameId) { this.gameId = gameId; }
 
     //endregion
 
     //region getters
-
-    public GameStatus getGameStatus() { return gameStatus; }
-    public Long getTotalScore() { return totalScore; }
     public List<Round> getRounds() { return rounds; }
     public Long getGameId() { return gameId; }
     public Round getCurrentRound(){
@@ -67,13 +61,5 @@ public class Game {
             listRound.add(listFeedback);
         }
         return listRound;
-    }
-
-    public void addScore(){
-
-    }
-
-    public void endGame(){
-
     }
 }

@@ -42,13 +42,6 @@ public class Round {
         roundSetUp();
     }
 
-    public Round(String wordToGuess, int scorePerLetter, int maxAttempts){
-        this.wordToGuess = wordToGuess;
-        this.scorePerLetter = scorePerLetter;
-        this.maxAttempts = maxAttempts;
-        roundSetUp();
-    }
-
     private void roundSetUp(){
         setRoundId();
         calculateMaxScore();
@@ -57,11 +50,8 @@ public class Round {
 
     //region setters and getters
     //region setters
-    public static void setNextId(Long id){ nextId = id; }
     public static void setNextId(int id){ nextId = (long) id; }
 
-    public void setAllFeedback(List<Feedback> allFeedback) { this.allFeedback = allFeedback;}
-    public void setCurrentScore(int currentScore) { this.currentScore = currentScore; }
 
     public void setWordToGuess(String wordToGuess) {
         this.wordToGuess = wordToGuess;
@@ -80,12 +70,10 @@ public class Round {
     //endregion
     //region getters
     public List<Feedback> getAllFeedback() { return allFeedback; }
-    public String getWordToGuess() { return wordToGuess; }
-    public List<String> getAttempts() { return attempts; }
+
     public boolean isRoundActive() { return roundActive; }
     public int getCurrentScore() { return currentScore; }
-    public int getMaxAttempts() { return maxAttempts; }
-    public static Long getNextId() { return nextId; }
+
     public int getMaxScore() { return maxScore; }
     public Long getRoundId() { return roundId; }
 

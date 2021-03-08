@@ -40,22 +40,10 @@ public class Hint {
     }
 
     @Override
-    public String toString() {
-        return "Hint{" +
-                "hints=" + hints +
-                '}';
-    }
-
-    @Override
     public boolean equals(Object o) {
         if (this == o) return true;
         if (o == null || getClass() != o.getClass()) return false;
         Hint hint = (Hint) o;
         return Objects.equals(hints, hint.hints);
-    }
-
-    @Override
-    public int hashCode() {
-        return Objects.hash(hints);
     }
 }
