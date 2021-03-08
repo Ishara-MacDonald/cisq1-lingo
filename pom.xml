@@ -17,6 +17,9 @@
     <properties>
         <java.version>13</java.version>
         <project.build.sourceEncoding>UTF-8</project.build.sourceEncoding>
+        <sonar.projectKey>Ishara-MacDonald_cisq1-lingo</sonar.projectKey>
+        <sonar.organization>ishara-macdonald</sonar.organization>
+        <sonar.host.url>https://sonarcloud.io</sonar.host.url>
     </properties>
 
     <dependencies>
