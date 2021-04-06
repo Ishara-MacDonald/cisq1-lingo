@@ -13,6 +13,22 @@ public class Feedback {
     public Feedback(String word, String attempt) {
         this.word = word.toUpperCase();
         this.attempt = attempt.toUpperCase();
+        if(lastHint.getHints().isEmpty()){
+            initiateHint();
+        }
+    }
+
+    private void initiateHint(){
+        List<String> hints = new ArrayList<>();
+        for(int x = 0; x < word.length(); x++){
+            if(x == 0){
+                hints.add(String.valueOf(word.charAt(x)));
+            }else{
+                hints.add(".");
+            }
+        }
+
+        lastHint = new Hint(hints);
     }
 
     public Hint getLastHint(){

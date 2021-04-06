@@ -17,7 +17,7 @@ class FeedbackTest {
 
     @BeforeEach
     void setUp(){
-        feedback = new Feedback("Hallo", "");
+        feedback = new Feedback("BAARD", "");
     }
 
     //region Tests for isWordGuessed()
@@ -39,7 +39,6 @@ class FeedbackTest {
     //endregion
 
     //region Tests for isWordValid()
-
     @Test
     @DisplayName("Word is has the correct amount of letters")
     void guessIsValid(){
@@ -64,41 +63,35 @@ class FeedbackTest {
     //endregion
 
     //region Tests for generateMarks(): Generating Marks
-
-    @Test
-    @DisplayName("Feedback Generates the Correct Marks")
-    void feedbackGeneratesCorrectMarks(){
-        feedback.addAttempt("hallo");
-        assertEquals(listOfCorrectMarks, feedback.getMarks());
+    @ParameterizedTest
+    @MethodSource({"provideMarkExamples"})
+    @DisplayName("Feedback generates correct marks")
+    void feedbackGeneratesMarks(List<String> attempts, List<Mark> expectedMarks){
+        for(String attempt : attempts){
+            feedback.addAttempt(attempt);
+        }
+        assertEquals(expectedMarks, feedback.getMarks());
     }
 
-    @Test
-    @DisplayName("Feedback Generates the One Absent Mark")
-    void feedbackGeneratesAbsentMark(){
-        feedback.addAttempt("hello");
-        assertEquals(List.of(Mark.CORRECT, Mark.ABSENT, Mark.CORRECT, Mark.CORRECT, Mark.CORRECT), feedback.getMarks());
-    }
-
-    @Test
-    @DisplayName("Feedback Generates the One Present Mark")
-    void feedbackGeneratesPresentMark(){
-        feedback.addAttempt("hlllo");
-        assertEquals(List.of(Mark.CORRECT, Mark.PRESENT, Mark.CORRECT, Mark.CORRECT, Mark.CORRECT), feedback.getMarks());
-    }
-
-    @Test
-    @DisplayName("Feedback after two attempts")
-    void feedbackGeneratesTwoMarks(){
-        feedback.addAttempt("hello");
-        System.out.println(feedback.getMarks());
-        feedback.addAttempt("shirt");
-        System.out.println(feedback.getMarks());
-        assertEquals(List.of(Mark.ABSENT, Mark.PRESENT, Mark.ABSENT, Mark.ABSENT, Mark.ABSENT), feedback.getMarks());
+    static Stream<Arguments> provideMarkExamples(){
+        return Stream.of(
+                Arguments.of(List.of("baard"), List.of(Mark.CORRECT, Mark.CORRECT, Mark.CORRECT, Mark.CORRECT, Mark.CORRECT )),
+                Arguments.of(List.of("board"), List.of(Mark.CORRECT, Mark.ABSENT, Mark.CORRECT, Mark.CORRECT, Mark.CORRECT)),
+                Arguments.of(List.of("brard"), List.of(Mark.CORRECT, Mark.PRESENT, Mark.CORRECT, Mark.CORRECT, Mark.CORRECT)),
+                Arguments.of(List.of("board", "magen"), List.of(Mark.ABSENT, Mark.CORRECT, Mark.ABSENT, Mark.ABSENT, Mark.ABSENT))
+        );
     }
     //endregion
 
     //region Tests for Feedback.giveHint(): Generating Hints
-    // word to guess is 'Hallo' ( see method setUp() )
+    // word to guess is 'BAARD' ( see method setUp() )
+
+    @Test
+    void initialHint(){
+        System.out.println(feedback.getLastHint());
+        assertEquals(List.of("B", ".", ".", ".", "."), feedback.getLastHint().getHints());
+    }
+
     @ParameterizedTest
     @MethodSource({"provideHintExamples"})
     @DisplayName("Hint gives Letter at Correct Marks")
@@ -106,17 +99,19 @@ class FeedbackTest {
         for(String attempt: attempts){
             feedback.addAttempt(attempt);
         }
+        System.out.println(new Hint(expectedHint) + " " + feedback.getLastHint());
         assertEquals(new Hint(expectedHint), feedback.getLastHint());
     }
 
     static Stream<Arguments> provideHintExamples(){
         return Stream.of(
-                Arguments.of(List.of("hallo"), List.of("H","A","L","L","O")),
-                Arguments.of(List.of("hellp"), List.of("H",".","L","L",".")),
-                Arguments.of(List.of("halll"), List.of("H","A","L","L",".")),
-                Arguments.of(List.of("hal"), List.of(".",".",".",".",".")),
-                Arguments.of(List.of("heyoo","shirt"), List.of("H",".",".",".","O")),
-                Arguments.of(List.of("heyoo","shirt", "Hello"), List.of("H",".","L","L","O"))
+                Arguments.of(List.of("BAARD"), List.of("B","A","A","R","D")),
+                Arguments.of(List.of("BONJE"), List.of("B",".",".",".",".")),
+                Arguments.of(List.of("DRAAD"), List.of("B",".","A",".","D")),
+                Arguments.of(List.of("BERGEN"), List.of("B",".",".",".",".")),
+                Arguments.of(List.of("BRAAD","SHIRT"), List.of("B",".","A","R","D")),
+                Arguments.of(List.of("DRAAD","BERGT", "BOARD"), List.of("B",".","A","R","D")),
+                Arguments.of(List.of("barst", "draad"), List.of("B", "A", "A", ".", "D"))
         );
     }
 
