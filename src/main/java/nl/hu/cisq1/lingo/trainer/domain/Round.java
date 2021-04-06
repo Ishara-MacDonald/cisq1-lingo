@@ -1,5 +1,7 @@
 package nl.hu.cisq1.lingo.trainer.domain;
 
+import javax.annotation.Generated;
+import javax.persistence.GeneratedValue;
 import java.util.ArrayList;
 import java.util.List;
 
@@ -119,6 +121,7 @@ public class Round {
     }
 
     @Override
+    @GeneratedValue
     public String toString() {
         return String.format(
             "Round{ roundId: %s\nwordtoGuess: %s\nmaxAttempts: %s\nroundActive: %s\ncurrentScore: %s\nmaxScore: %s\nscorePerLetter: %s\npenalty: %s\nallFeedback:\n%s",

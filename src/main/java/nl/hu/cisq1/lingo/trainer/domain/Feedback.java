@@ -1,5 +1,6 @@
 package nl.hu.cisq1.lingo.trainer.domain;
 
+import javax.persistence.GeneratedValue;
 import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.List;
@@ -91,15 +92,12 @@ public class Feedback {
         }
     }
 
-    public boolean isWordGuessed() {
-        return ! (marks.contains(Mark.ABSENT) || marks.contains(Mark.PRESENT) || marks.contains(Mark.INVALID));
-    }
-
     public boolean isWordValid(){
         return attempt.length() == word.length();
     }
 
     @Override
+    @GeneratedValue
     public String toString() {
         return String.format("Feedback { marks: %s\nhint: %s}", marks, lastHint);
     }

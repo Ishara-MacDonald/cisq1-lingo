@@ -19,7 +19,6 @@ public class Hint {
     public void processFeedbackIntoHints(List<Mark> marks, Hint hint, String wordToGuess){
         List<String> hintPerLetter = new ArrayList<>();
         boolean isFirstHint = hint.getHints().isEmpty();
-        //int counter = 0;
 
         for(int counter = 0; counter < marks.size(); counter ++){
             if(marks.get(counter) == Mark.CORRECT){

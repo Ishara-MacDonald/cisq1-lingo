@@ -116,4 +116,16 @@ class RoundTest {
         assertTrue(round.getCurrentScore() < round.getMaxScore());
     }
     //endregion
+    //region isRoundActive()
+    @Test
+    void roundisStillActive(){
+        round.processAttempts("hoi");
+        assertTrue(round.isRoundActive());
+    }
+
+    @Test
+    void roundIsSetInactive(){
+        round.processAttempts("Hey");
+        assertFalse(round.isRoundActive());
+    }
 }

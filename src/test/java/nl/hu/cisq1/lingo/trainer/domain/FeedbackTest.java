@@ -11,32 +11,12 @@ import java.util.stream.Stream;
 import static org.junit.jupiter.api.Assertions.*;
 
 class FeedbackTest {
-    List<Mark> listOfCorrectMarks = List.of(Mark.CORRECT, Mark.CORRECT, Mark.CORRECT, Mark.CORRECT, Mark.CORRECT );
-    List<Mark> listOfMarksWithOneAbsent = List.of(Mark.ABSENT, Mark.CORRECT, Mark.CORRECT, Mark.CORRECT, Mark.CORRECT );
     Feedback feedback;
 
     @BeforeEach
     void setUp(){
         feedback = new Feedback("BAARD", "");
     }
-
-    //region Tests for isWordGuessed()
-
-    @Test
-    @DisplayName("Word is guess if all letters are correct")
-    void wordIsGuessed(){
-        feedback.setMarks(listOfCorrectMarks);
-        assertTrue(feedback.isWordGuessed());
-    }
-    
-    @Test
-    @DisplayName("Word is not guessed if not all letters are correct")
-    void wordIsNotGuessed(){
-        feedback.setMarks(listOfMarksWithOneAbsent);
-        assertFalse(feedback.isWordGuessed());
-    }
-
-    //endregion
 
     //region Tests for isWordValid()
     @Test
