@@ -92,11 +92,7 @@ public class Feedback {
     }
 
     public boolean isWordGuessed() {
-        for(Mark mark : marks){
-            if(! mark.equals(Mark.CORRECT))
-                return false;
-        }
-        return true;
+        return ! (marks.contains(Mark.ABSENT) || marks.contains(Mark.PRESENT) || marks.contains(Mark.INVALID));
     }
 
     public boolean isWordValid(){

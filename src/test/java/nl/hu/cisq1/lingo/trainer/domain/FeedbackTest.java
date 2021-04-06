@@ -63,6 +63,7 @@ class FeedbackTest {
     //endregion
 
     //region Tests for generateMarks(): Generating Marks
+    // word to guess is 'BAARD' ( see method setUp() )
     @ParameterizedTest
     @MethodSource({"provideMarkExamples"})
     @DisplayName("Feedback generates correct marks")
@@ -77,7 +78,7 @@ class FeedbackTest {
         return Stream.of(
                 Arguments.of(List.of("baard"), List.of(Mark.CORRECT, Mark.CORRECT, Mark.CORRECT, Mark.CORRECT, Mark.CORRECT )),
                 Arguments.of(List.of("board"), List.of(Mark.CORRECT, Mark.ABSENT, Mark.CORRECT, Mark.CORRECT, Mark.CORRECT)),
-                Arguments.of(List.of("brard"), List.of(Mark.CORRECT, Mark.PRESENT, Mark.CORRECT, Mark.CORRECT, Mark.CORRECT)),
+                Arguments.of(List.of("brard"), List.of(Mark.CORRECT, Mark.ABSENT, Mark.CORRECT, Mark.CORRECT, Mark.CORRECT)),
                 Arguments.of(List.of("board", "magen"), List.of(Mark.ABSENT, Mark.CORRECT, Mark.ABSENT, Mark.ABSENT, Mark.ABSENT)),
                 Arguments.of(List.of("bonje"), List.of(Mark.CORRECT, Mark.ABSENT, Mark.ABSENT, Mark.ABSENT, Mark.ABSENT)),
                 Arguments.of(List.of("barst", "draad"), List.of(Mark.ABSENT, Mark.PRESENT, Mark.CORRECT, Mark.PRESENT, Mark.CORRECT))

@@ -17,15 +17,13 @@ public class Hint {
     public List<String> getHints(){return hints;}
 
     public void processFeedbackIntoHints(List<Mark> marks, Hint hint, String wordToGuess){
-        List<String> listOfLettersOfWord = new ArrayList<>(Arrays.asList(wordToGuess.split("")));
         List<String> hintPerLetter = new ArrayList<>();
-
         boolean isFirstHint = hint.getHints().isEmpty();
-        int counter = 0;
+        //int counter = 0;
 
-        for(Mark mark : marks){
-            if(mark == Mark.CORRECT){
-                hintPerLetter.add(listOfLettersOfWord.get(counter));
+        for(int counter = 0; counter < marks.size(); counter ++){
+            if(marks.get(counter) == Mark.CORRECT){
+                hintPerLetter.add(String.valueOf(wordToGuess.charAt(counter)));
             }
             else if(!isFirstHint) {
                 hintPerLetter.add(getHints().get(counter));
@@ -33,8 +31,6 @@ public class Hint {
             else {
                 hintPerLetter.add(".");
             }
-
-            counter++;
         }
         hints = hintPerLetter;
     }
