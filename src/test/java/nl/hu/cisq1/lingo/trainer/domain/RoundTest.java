@@ -1,8 +1,6 @@
 package nl.hu.cisq1.lingo.trainer.domain;
 
-import org.junit.jupiter.api.BeforeEach;
-import org.junit.jupiter.api.DisplayName;
-import org.junit.jupiter.api.Test;
+import org.junit.jupiter.api.*;
 import org.junit.jupiter.params.ParameterizedTest;
 import org.junit.jupiter.params.provider.Arguments;
 import org.junit.jupiter.params.provider.MethodSource;
@@ -122,12 +120,14 @@ class RoundTest {
 
     //region isRoundActive()
     @Test
+    @DisplayName("Round is still active after ")
     void roundisStillActive(){
         round.processAttempts("hoi");
         assertTrue(round.isRoundActive());
     }
 
     @Test
+    @DisplayName("Round is still active after ")
     void roundIsSetInactive(){
         round.processAttempts("Hey");
         assertFalse(round.isRoundActive());
@@ -137,18 +137,18 @@ class RoundTest {
     //region Tests for roundattempts
     @ParameterizedTest
     @MethodSource("provideExamplesForGameProgress")
-    @DisplayName("")
-    void getFeedbackWithGameProgress(int maxAttempts, List<String> attempts, int expected){
+    @DisplayName("Player can not succeed the maximum amount of Attempts")
+    void getMaxAttempts(int maxAttempts, List<String> attempts, int expected){
         round.setMaxAttempts(maxAttempts);
         for(String attempt : attempts){
             round.addAttempt(attempt);
         }
-
         assertEquals(expected, round.getAllFeedback().size());
     }
 
     static Stream<Arguments> provideExamplesForGameProgress(){
         return Stream.of(
+                Arguments.of(3, List.of("Hey", "hazel"), 1),
                 Arguments.of(3, List.of("Short", "Hazel"), 2),
                 Arguments.of(3, List.of("Shirt", "Doodle", "Hazel"), 3),
                 Arguments.of(3, List.of("Shirt", "Doodle", "Hazel", "House"), 3)

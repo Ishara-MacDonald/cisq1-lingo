@@ -15,6 +15,9 @@ public class Feedback {
         this.word = word.toUpperCase();
         this.attempt = attempt.toUpperCase();
         this.hint = hint;
+        if(hint.getHints().isEmpty()){
+            this.hint = hint.firstHintOfRound(word);
+        }
     }
 
     public Hint getHint(){ return hint; }
@@ -25,9 +28,10 @@ public class Feedback {
         giveHint();
     }
 
-    public void addAttempt(String attempt){
+    public Hint addAttempt(String attempt){
         this.attempt = attempt.toUpperCase();
         processAttempt();
+        return hint;
     }
 
     public void giveHint(){

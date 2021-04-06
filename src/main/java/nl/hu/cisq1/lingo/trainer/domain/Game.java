@@ -1,5 +1,7 @@
 package nl.hu.cisq1.lingo.trainer.domain;
 
+import org.hibernate.loader.entity.plan.PaddedBatchingEntityLoader;
+
 import java.util.ArrayList;
 import java.util.List;
 
@@ -10,7 +12,7 @@ public class Game {
     private static Long nextGameId = 0L;
     private Long gameId;
 
-    private GameStatus gameStatus;
+    private GameStatus gameStatus = GameStatus.WAITING_FOR_ROUND;
     private Long totalScore;
     private int maxAttempts = 5;
 
@@ -55,26 +57,32 @@ public class Game {
     //endregion
 
     //endregion
-    public void startNewRound(String wordToGuess){
-        if(isNewRoundAllowed()){
+    public GameStatus startNewRound(String wordToGuess){
+        if(gameStatus == GameStatus.WAITING_FOR_ROUND){
+            gameStatus = GameStatus.PLAYING;
             Round newRound = new Round(wordToGuess, maxAttempts);
             rounds.add(newRound);
-        }else{
-            System.out.println("Already have an active round. RoundId: + " + getCurrentRound().getRoundId());
         }
-    }
-
-    private boolean isNewRoundAllowed(){
-        for(Round round : rounds){
-            if(round.isRoundActive() || round.isPlayerEliminated()){
-                return false;
-            }
-        }
-        return true;
+        return gameStatus;
     }
 
     public void guess(String attempt){
         getCurrentRound().addAttempt(attempt);
+        updateGameStatus();
+    }
+
+    public void updateGameStatus(){
+        gameStatus = GameStatus.WAITING_FOR_ROUND;
+        for(Round round : rounds){
+            if(round.isRoundActive()){
+                gameStatus = GameStatus.PLAYING;
+                break;
+            }
+        }
+        if(getCurrentRound().isPlayerEliminated()){
+            gameStatus = GameStatus.ELIMINATED;
+        }
+
     }
 
     public GameProgress getProgress(){

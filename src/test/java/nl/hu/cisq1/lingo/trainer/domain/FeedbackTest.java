@@ -70,6 +70,7 @@ class FeedbackTest {
     // word to guess is 'BAARD' ( see method setUp() )
 
     @Test
+    @DisplayName("Before player starts guessing, First Leter should be Shown.")
     void initialHint(){
         assertEquals(List.of("B", ".", ".", ".", "."), feedback.getHint().getHints());
     }
@@ -81,7 +82,6 @@ class FeedbackTest {
         for(String attempt: attempts){
             feedback.addAttempt(attempt);
         }
-        System.out.println(new Hint(expectedHint) + " " + feedback.getHint());
         assertEquals(new Hint(expectedHint), feedback.getHint());
     }
 

@@ -52,7 +52,7 @@ class GameTest {
 
     @ParameterizedTest
     @MethodSource("provideExamplesForGameProgress")
-    @DisplayName("")
+    @DisplayName("Feedback should be added to list of Feedback with every Guess.")
     void getFeedbackWithGameProgress(int maxAttempts, List<String> attempts, int expected){
         game.startNewRound("Shirt");
         game.setMaxAttempts(maxAttempts);
@@ -66,12 +66,14 @@ class GameTest {
     static Stream<Arguments> provideExamplesForGameProgress(){
         return Stream.of(
                 Arguments.of(3, List.of("Short", "Hazel"), 2),
-                Arguments.of(3, List.of("Shirt", "Doodle", "Hazel"), 3),
-                Arguments.of(3, List.of("Shirt", "Doodle", "Hazel", "House"), 3)
+                Arguments.of(3, List.of("Short", "Doodle", "Hazel"), 3),
+                Arguments.of(3, List.of("Short", "Doodle", "Hazel", "House"), 3),
+                Arguments.of(3, List.of("Shirt", "Doodle", "Hazel", "House"), 1)
         );
     }
 
     @Test
+    @DisplayName("When Round is created, First letter of the wordToGuess should be showed.")
     void showHintWhenRoundCreated(){
         game.startNewRound("shirt");
         assertEquals(List.of("S", ".", ".", ".", "."), game.getProgress().getRound().getLastHint().getHints());
@@ -85,7 +87,6 @@ class GameTest {
             game.startNewRound(wordsToGuess.get(counter));
             game.guess(attempts.get(counter));
         }
-
         assertEquals(expectedAmountRounds, game.getRounds().size());
     }
 

@@ -72,7 +72,6 @@ public class Round {
     public void setHints(){
         lastHint = lastHint.firstHintOfRound(wordToGuess);
         hints.add(lastHint);
-        System.out.println(lastHint);
     }
     //endregion
     //region getters
@@ -90,12 +89,14 @@ public class Round {
     //endregion
 
     public void addAttempt(String attempt){
-        if(allFeedback.size() < maxAttempts){
-            attempts.add(attempt);
-            processAttempts(attempt);
-        }else{
-            roundActive = false;
-            isPlayerEliminated = true;
+        if(roundActive){
+            if(allFeedback.size() < maxAttempts){
+                attempts.add(attempt);
+                processAttempts(attempt);
+            }else{
+                roundActive = false;
+                isPlayerEliminated = true;
+            }
         }
     }
 
@@ -107,9 +108,7 @@ public class Round {
 
         Feedback feedback = new Feedback(wordToGuess, attempt, lastHint);
 
-        feedback.addAttempt( attempt );
-
-        lastHint = feedback.getHint();
+        lastHint = feedback.addAttempt( attempt );
         hints.add(lastHint);
         allFeedback.add( feedback );
     }
