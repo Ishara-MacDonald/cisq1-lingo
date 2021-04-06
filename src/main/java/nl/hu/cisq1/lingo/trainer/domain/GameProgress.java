@@ -23,13 +23,7 @@ public class GameProgress {
         longId = round.getRoundId();
         isActive = round.isRoundActive();
         roundFeedback = round.getAllFeedback();
-        setUpAttempts();
-    }
-
-    private void setUpAttempts(){
-        for(Feedback feedback: roundFeedback){
-            attempts.add(feedback.getAttempt());
-        }
+        attempts = round.getAttempts();
     }
     //endregion
 

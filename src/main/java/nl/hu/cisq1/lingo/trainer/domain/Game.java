@@ -17,7 +17,12 @@ public class Game {
     private List<Round> rounds = new ArrayList<>();
     //endregion
 
-    public Game(){
+    public Game(int maxAttempts){
+        this.maxAttempts = maxAttempts;
+        gameSetup();
+    }
+
+    public void gameSetup(){
         this.gameStatus = GameStatus.WAITING_FOR_ROUND;
         totalScore = 0L;
         wordLength = startWordLength;
@@ -31,7 +36,9 @@ public class Game {
     //region setters
     public void setMaxAttempts(int maxAttempts){
         this.maxAttempts = maxAttempts;
-        getCurrentRound().setMaxAttempts(maxAttempts);
+        if(!rounds.isEmpty()){
+            getCurrentRound().setMaxAttempts(maxAttempts);
+        }
     }
     public static void setNextGameId(int nextGameId) { Game.nextGameId = (long) nextGameId; }
     public void setRounds(List<Round> rounds) { this.rounds = rounds; }
@@ -49,8 +56,21 @@ public class Game {
 
     //endregion
     public void startNewRound(String wordToGuess){
-        Round newRound = new Round(wordToGuess, maxAttempts);
-        rounds.add(newRound);
+        if(isNewRoundAllowed()){
+            Round newRound = new Round(wordToGuess, maxAttempts);
+            rounds.add(newRound);
+        }else{
+            System.out.println("Already have an active round. RoundId: + " + getCurrentRound().getRoundId());
+        }
+    }
+
+    private boolean isNewRoundAllowed(){
+        for(Round round : rounds){
+            if(round.isRoundActive() || round.isPlayerEliminated()){
+                return false;
+            }
+        }
+        return true;
     }
 
     public void guess(String attempt){

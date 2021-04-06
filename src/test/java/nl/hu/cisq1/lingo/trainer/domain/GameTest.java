@@ -19,7 +19,7 @@ class GameTest {
     void setUp(){
         Game.setNextGameId(0);
         Round.setNextId(0);
-        game = new Game();
+        game = new Game(5);
     }
 
     @Test
@@ -31,7 +31,7 @@ class GameTest {
     @Test
     @DisplayName("A new Game gets a new gameId")
     void newGameIdGetsGenerated(){
-        Game secondGame = new Game();
+        Game secondGame = new Game(5);
         assertEquals(1, secondGame.getGameId());
     }
 
@@ -45,22 +45,10 @@ class GameTest {
     @Test
     @DisplayName("getCurrentRound() should give the latest round")
     void getLatestRound(){
-        game.setRounds(List.of(new Round(), new Round(), new Round()));
+        game.setRounds(List.of(new Round("", 2), new Round("", 2), new Round("", 2)));
 
         assertEquals(2, game.getProgress().getRoundId());
     }
-
-//    @Test
-//    @DisplayName("showFeedbackPerRound should give the feedback per round")
-//    void getRoundWithFeedback(){
-//        game.startNewRound("Shirt");
-//        game.setMaxAttempts(3);
-//        Round currentRound = game.getProgress().getRound();
-//
-//        mockRound(currentRound);
-//
-//        assertEquals(1, game.getProgress().getRoundFeedback().size());
-//    }
 
     @ParameterizedTest
     @MethodSource("provideExamplesForGameProgress")
@@ -68,14 +56,11 @@ class GameTest {
     void getFeedbackWithGameProgress(int maxAttempts, List<String> attempts, int expected){
         game.startNewRound("Shirt");
         game.setMaxAttempts(maxAttempts);
-        GameProgress gameProgress = game.getProgress();
-        Round currentRound = gameProgress.getRound();
-
         for(String attempt : attempts){
-            currentRound.addAttempt(attempt);
+            game.guess(attempt);
         }
 
-        assertEquals(expected, gameProgress.getRoundFeedback().size());
+        assertEquals(expected, game.getProgress().getRoundFeedback().size());
     }
 
     static Stream<Arguments> provideExamplesForGameProgress(){
@@ -84,6 +69,44 @@ class GameTest {
                 Arguments.of(3, List.of("Shirt", "Doodle", "Hazel"), 3),
                 Arguments.of(3, List.of("Shirt", "Doodle", "Hazel", "House"), 3)
         );
+    }
+
+    @Test
+    void showHintWhenRoundCreated(){
+        game.startNewRound("shirt");
+        assertEquals(List.of("S", ".", ".", ".", "."), game.getProgress().getRound().getLastHint().getHints());
+    }
+
+    @ParameterizedTest
+    @MethodSource("provideHintsForRoundActive")
+    @DisplayName("New Round can only be made when there isn't a Round active already.")
+    void canPlayerStartNewRound(List<String> wordsToGuess, List<String> attempts, int expectedAmountRounds){
+        for(int counter = 0; counter < wordsToGuess.size(); counter++){
+            game.startNewRound(wordsToGuess.get(counter));
+            game.guess(attempts.get(counter));
+        }
+
+        assertEquals(expectedAmountRounds, game.getRounds().size());
+    }
+
+    static Stream<Arguments> provideHintsForRoundActive(){
+        return Stream.of(
+                Arguments.of(List.of("shirt", "button"), List.of("shirt", "button"), 2),
+                Arguments.of(List.of("shirt", "button"), List.of("button", "button"), 1)
+        );
+    }
+
+    @Test
+    @DisplayName("Round can't be made when player is eliminated")
+    void noNewRoundAfterElimination(){
+        game.startNewRound("shirt");
+        game.setMaxAttempts(1);
+        game.guess("button");
+        game.guess("shirt");
+
+        game.startNewRound("button");
+
+        assertEquals(1, game.getRounds().size());
     }
 
 

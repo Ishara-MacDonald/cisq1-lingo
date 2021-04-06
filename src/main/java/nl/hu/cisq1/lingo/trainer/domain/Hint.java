@@ -14,6 +14,19 @@ public class Hint {
         this.hints = hints;
     }
 
+    public Hint firstHintOfRound(String word){
+        String upperCaseWord = word.toUpperCase();
+        List<String> hints = new ArrayList<>();
+        for(int x = 0; x < upperCaseWord.length(); x++){
+            if(x == 0){
+                hints.add(String.valueOf(upperCaseWord.charAt(x)));
+            }else{
+                hints.add(".");
+            }
+        }
+        return new Hint(hints);
+    }
+
     public List<String> getHints(){return hints;}
 
     public void processFeedbackIntoHints(List<Mark> marks, Hint hint, String wordToGuess){
@@ -35,9 +48,7 @@ public class Hint {
     }
 
     @Override
-    public String toString() {
-        return "Hint{ hints=" + hints + '}';
-    }
+    public String toString() { return "Hint{ hints=" + hints + '}'; }
 
     @Override
     public boolean equals(Object o) {

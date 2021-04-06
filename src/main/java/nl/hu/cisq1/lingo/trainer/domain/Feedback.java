@@ -8,40 +8,17 @@ import java.util.List;
 public class Feedback {
     private String attempt;
     private final String word;
-    private List<Mark> marks = new ArrayList<>();
-    private Hint lastHint = new Hint();
+    private final List<Mark> marks = new ArrayList<>();
+    private Hint hint;
 
-    public Feedback(String word, String attempt) {
+    public Feedback(String word, String attempt, Hint hint) {
         this.word = word.toUpperCase();
         this.attempt = attempt.toUpperCase();
-        if(lastHint.getHints().isEmpty()){
-            initiateHint();
-        }
+        this.hint = hint;
     }
 
-    private void initiateHint(){
-        List<String> hints = new ArrayList<>();
-        for(int x = 0; x < word.length(); x++){
-            if(x == 0){
-                hints.add(String.valueOf(word.charAt(x)));
-            }else{
-                hints.add(".");
-            }
-        }
-
-        lastHint = new Hint(hints);
-    }
-
-    public Hint getLastHint(){
-        return lastHint;
-    }
-    public List<Mark> getMarks(){
-        return marks;
-    }
-    public String getAttempt(){ return attempt; }
-
-    public void setMarks(List<Mark> marks){ this.marks = marks; }
-    public void setLastHint(Hint lastHint) { this.lastHint = lastHint; }
+    public Hint getHint(){ return hint; }
+    public List<Mark> getMarks(){ return marks; }
 
     public void processAttempt(){
         generateMarks();
@@ -54,7 +31,7 @@ public class Feedback {
     }
 
     public void giveHint(){
-        lastHint.processFeedbackIntoHints(marks, lastHint, word);
+        hint.processFeedbackIntoHints(marks, hint, word);
     }
 
     public void generateMarks(){
@@ -100,6 +77,6 @@ public class Feedback {
     @Override
     @GeneratedValue
     public String toString() {
-        return String.format("Feedback { marks: %s\nhint: %s}", marks, lastHint);
+        return String.format("Feedback { marks: %s\nhint: %s}", marks, hint);
     }
 }

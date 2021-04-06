@@ -15,7 +15,7 @@ class FeedbackTest {
 
     @BeforeEach
     void setUp(){
-        feedback = new Feedback("BAARD", "");
+        feedback = new Feedback("BAARD", "", new Hint());
     }
 
     //region Tests for isWordValid()
@@ -71,8 +71,7 @@ class FeedbackTest {
 
     @Test
     void initialHint(){
-        System.out.println(feedback.getLastHint());
-        assertEquals(List.of("B", ".", ".", ".", "."), feedback.getLastHint().getHints());
+        assertEquals(List.of("B", ".", ".", ".", "."), feedback.getHint().getHints());
     }
 
     @ParameterizedTest
@@ -82,8 +81,8 @@ class FeedbackTest {
         for(String attempt: attempts){
             feedback.addAttempt(attempt);
         }
-        System.out.println(new Hint(expectedHint) + " " + feedback.getLastHint());
-        assertEquals(new Hint(expectedHint), feedback.getLastHint());
+        System.out.println(new Hint(expectedHint) + " " + feedback.getHint());
+        assertEquals(new Hint(expectedHint), feedback.getHint());
     }
 
     static Stream<Arguments> provideHintExamples(){

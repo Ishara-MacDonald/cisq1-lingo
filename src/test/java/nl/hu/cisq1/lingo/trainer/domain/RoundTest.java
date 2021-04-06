@@ -3,8 +3,12 @@ package nl.hu.cisq1.lingo.trainer.domain;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;
+import org.junit.jupiter.params.ParameterizedTest;
+import org.junit.jupiter.params.provider.Arguments;
+import org.junit.jupiter.params.provider.MethodSource;
 
 import java.util.List;
+import java.util.stream.Stream;
 
 import static org.junit.jupiter.api.Assertions.*;
 
@@ -13,8 +17,7 @@ class RoundTest {
     @BeforeEach
     void setUp(){
         Round.setNextId(0);
-        round = new Round();
-        round.setWordToGuess("Hey");
+        round = new Round("Hey", 2);
     }
 
     //region Tests for RoundId
@@ -27,7 +30,7 @@ class RoundTest {
     @Test
     @DisplayName("A new round gets a new roundId")
     void roundIdGetsGenerated(){
-        Round secondRound = new Round();
+        Round secondRound = new Round("", 2);
         assertEquals(1, secondRound.getRoundId());
     }
     //endregion
@@ -116,6 +119,7 @@ class RoundTest {
         assertTrue(round.getCurrentScore() < round.getMaxScore());
     }
     //endregion
+
     //region isRoundActive()
     @Test
     void roundisStillActive(){
@@ -128,4 +132,27 @@ class RoundTest {
         round.processAttempts("Hey");
         assertFalse(round.isRoundActive());
     }
+    //endregion
+
+    //region Tests for roundattempts
+    @ParameterizedTest
+    @MethodSource("provideExamplesForGameProgress")
+    @DisplayName("")
+    void getFeedbackWithGameProgress(int maxAttempts, List<String> attempts, int expected){
+        round.setMaxAttempts(maxAttempts);
+        for(String attempt : attempts){
+            round.addAttempt(attempt);
+        }
+
+        assertEquals(expected, round.getAllFeedback().size());
+    }
+
+    static Stream<Arguments> provideExamplesForGameProgress(){
+        return Stream.of(
+                Arguments.of(3, List.of("Short", "Hazel"), 2),
+                Arguments.of(3, List.of("Shirt", "Doodle", "Hazel"), 3),
+                Arguments.of(3, List.of("Shirt", "Doodle", "Hazel", "House"), 3)
+        );
+    }
+    //endregion
 }
