@@ -3,8 +3,12 @@ package nl.hu.cisq1.lingo.trainer.domain;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;
+import org.junit.jupiter.params.ParameterizedTest;
+import org.junit.jupiter.params.provider.Arguments;
+import org.junit.jupiter.params.provider.MethodSource;
 
 import java.util.List;
+import java.util.stream.Stream;
 
 import static org.junit.jupiter.api.Assertions.*;
 
@@ -34,7 +38,7 @@ class GameTest {
     @Test
     @DisplayName("When a new round is started, this round is added to rounds")
     void startNewGame(){
-        game.startNewRound();
+        game.startNewRound("");
         assertFalse(game.getRounds().isEmpty());
     }
 
@@ -43,35 +47,43 @@ class GameTest {
     void getLatestRound(){
         game.setRounds(List.of(new Round(), new Round(), new Round()));
 
-        assertEquals(2, game.getCurrentRound().getRoundId());
+        assertEquals(2, game.getProgress().getRoundId());
     }
 
-    @Test
-    @DisplayName("showFeedbackPerRound should give the feedback per round")
-    void getRoundWithFeedback(){
-        game.startNewRound("Shirt", 3);
-        Round currentRound = game.getCurrentRound();
+//    @Test
+//    @DisplayName("showFeedbackPerRound should give the feedback per round")
+//    void getRoundWithFeedback(){
+//        game.startNewRound("Shirt");
+//        game.setMaxAttempts(3);
+//        Round currentRound = game.getProgress().getRound();
+//
+//        mockRound(currentRound);
+//
+//        assertEquals(1, game.getProgress().getRoundFeedback().size());
+//    }
 
-        mockRound(currentRound);
+    @ParameterizedTest
+    @MethodSource("provideExamplesForGameProgress")
+    @DisplayName("")
+    void getFeedbackWithGameProgress(int maxAttempts, List<String> attempts, int expected){
+        game.startNewRound("Shirt");
+        game.setMaxAttempts(maxAttempts);
+        GameProgress gameProgress = game.getProgress();
+        Round currentRound = gameProgress.getRound();
 
-        assertEquals(1, game.showFeedbackPerRound().size());
+        for(String attempt : attempts){
+            currentRound.addAttempt(attempt);
+        }
+
+        assertEquals(expected, gameProgress.getRoundFeedback().size());
     }
 
-    @Test
-    @DisplayName("showFeedbackPerRound should give the feedback per round")
-    void getFeedbackWithRound(){
-        game.startNewRound("Shirt", 3);
-        Round currentRound = game.getCurrentRound();
-
-        mockRound(currentRound);
-
-        assertEquals(3, game.showFeedbackPerRound().get(0).size());
-    }
-
-    void mockRound(Round round){
-        round.addAttempt("sallo");
-        round.addAttempt("Hallo");
-        round.addAttempt("short");
+    static Stream<Arguments> provideExamplesForGameProgress(){
+        return Stream.of(
+                Arguments.of(3, List.of("Short", "Hazel"), 2),
+                Arguments.of(3, List.of("Shirt", "Doodle", "Hazel"), 3),
+                Arguments.of(3, List.of("Shirt", "Doodle", "Hazel", "House"), 3)
+        );
     }
 
 

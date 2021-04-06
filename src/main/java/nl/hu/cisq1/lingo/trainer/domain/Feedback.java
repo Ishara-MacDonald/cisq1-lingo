@@ -38,6 +38,7 @@ public class Feedback {
     public List<Mark> getMarks(){
         return marks;
     }
+    public String getAttempt(){ return attempt; }
 
     public void setMarks(List<Mark> marks){ this.marks = marks; }
     public void setLastHint(Hint lastHint) { this.lastHint = lastHint; }

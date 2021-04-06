@@ -4,13 +4,15 @@ import java.util.ArrayList;
 import java.util.List;
 
 public class Game {
-
     // region parameters
+    private static int startWordLength = 5;
+    private int wordLength = 5;
     private static Long nextGameId = 0L;
     private Long gameId;
 
     private GameStatus gameStatus;
     private Long totalScore;
+    private int maxAttempts = 5;
 
     private List<Round> rounds = new ArrayList<>();
     //endregion
@@ -18,6 +20,7 @@ public class Game {
     public Game(){
         this.gameStatus = GameStatus.WAITING_FOR_ROUND;
         totalScore = 0L;
+        wordLength = startWordLength;
 
         this.gameId = nextGameId;
         nextGameId += 1;
@@ -26,8 +29,10 @@ public class Game {
     //region setters and getters
 
     //region setters
-
-
+    public void setMaxAttempts(int maxAttempts){
+        this.maxAttempts = maxAttempts;
+        getCurrentRound().setMaxAttempts(maxAttempts);
+    }
     public static void setNextGameId(int nextGameId) { Game.nextGameId = (long) nextGameId; }
     public void setRounds(List<Round> rounds) { this.rounds = rounds; }
 
@@ -36,30 +41,28 @@ public class Game {
     //region getters
     public List<Round> getRounds() { return rounds; }
     public Long getGameId() { return gameId; }
-    public Round getCurrentRound(){
+    private Round getCurrentRound(){
         return rounds.get( rounds.size() -1 );
     }
 
     //endregion
 
     //endregion
-
-    public void startNewRound(){
-        Round newRound = new Round();
+    public void startNewRound(String wordToGuess){
+        Round newRound = new Round(wordToGuess, maxAttempts);
         rounds.add(newRound);
     }
 
-    public void startNewRound(String word, int maxAttempts){
-        Round newRound = new Round(word, maxAttempts);
-        rounds.add(newRound);
+    public void guess(String attempt){
+        getCurrentRound().addAttempt(attempt);
     }
 
-    public List<List<Feedback>> showFeedbackPerRound(){
-        List<List<Feedback>> listRound = new ArrayList<>();
-        for(Round round : rounds){
-            List<Feedback> listFeedback = new ArrayList<>(round.getAllFeedback());
-            listRound.add(listFeedback);
-        }
-        return listRound;
+    public GameProgress getProgress(){
+         return new GameProgress(getCurrentRound());
+    }
+
+    private int nextWordLength(){
+        wordLength += 1;
+        return wordLength;
     }
 }
