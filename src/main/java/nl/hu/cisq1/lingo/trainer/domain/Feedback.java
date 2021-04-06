@@ -57,35 +57,38 @@ public class Feedback {
 
     public void generateMarks(){
         marks.clear();
-        if(isWordValid()){
-            String[] splitGuess = attempt.split("");
-            int counter = 0;
 
-            for(String letter: splitGuess){
-                if(checkPresent(letter)){
-                    if(checkCorrect(letter, counter))
-                        marks.add(Mark.CORRECT);
-                    else
+        // attempt will only get marked if attempt is valid
+        if(isWordValid()){
+
+            // for every letter of attempt ...
+            for(int counter = 0; counter < attempt.length(); counter ++){
+                String letter = String.valueOf(attempt.charAt(counter));
+
+                // check if letter is equal to string at same index of 'word'
+                if(letter.equals(String.valueOf(word.charAt(counter)))){
+                    marks.add(Mark.CORRECT);
+                }
+                // check if letter is present in 'word'
+                else if(word.contains(letter)){
+                    // check for doubles
+                    if(counter == attempt.lastIndexOf(letter)){
                         marks.add(Mark.PRESENT);
-                }else{
+                    }else{
+                        marks.add(Mark.ABSENT);
+                    }
+                }
+                // if letter not present in 'word', letter is absent marked absent
+                else{
                     marks.add(Mark.ABSENT);
                 }
-                counter++;
             }
+        // if attempt is not valid, attempt will be marked invalid.
         }else{
             for(int i = 0; i < word.length(); i++){
                 marks.add(Mark.INVALID);
             }
         }
-    }
-
-    public boolean checkCorrect(String letter, int counter){
-        List<String> splitWord = new ArrayList<>(Arrays.asList(word.split("")));
-        return letter.equals(splitWord.get(counter));
-    }
-
-    public boolean checkPresent(String letter){
-        return word.contains(letter);
     }
 
     public boolean isWordGuessed() {
