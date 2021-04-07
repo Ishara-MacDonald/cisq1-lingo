@@ -1,9 +1,10 @@
 package nl.hu.cisq1.lingo.trainer.domain;
 
-import javax.persistence.GeneratedValue;
-import java.util.ArrayList;
-import java.util.List;
+import lombok.Data;
 
+import java.util.*;
+
+@Data
 public class Round {
 
     // region parameters
@@ -21,9 +22,9 @@ public class Round {
 
     // region attempts, word to Guess
     private List<String> attempts = new ArrayList<>();
-    private int maxAttempts = 1;
+    private int maxAttempts;
 
-    private String wordToGuess = "";
+    private String wordToGuess;
 
     private boolean isPlayerEliminated = false;
     //endregion
@@ -49,7 +50,6 @@ public class Round {
         setHints();
     }
 
-    //region setters and getters
     //region setters
     public static void setNextId(int id){ nextId = (long) id; }
 
@@ -73,19 +73,6 @@ public class Round {
         lastHint = lastHint.firstHintOfRound(wordToGuess);
         hints.add(lastHint);
     }
-    //endregion
-    //region getters
-    public List<Feedback> getAllFeedback() { return allFeedback; }
-
-    public boolean isRoundActive() { return roundActive; }
-    public int getCurrentScore() { return currentScore; }
-
-    public int getMaxScore() { return maxScore; }
-    public Long getRoundId() { return roundId; }
-    public List<String> getAttempts(){return attempts;}
-    public Hint getLastHint() { return lastHint; }
-    public boolean isPlayerEliminated() { return isPlayerEliminated; }
-    //endregion
     //endregion
 
     public void addAttempt(String attempt){
@@ -127,14 +114,5 @@ public class Round {
 
     private void calculatePentalty(){
         penalty = maxScore / maxAttempts;
-    }
-
-    @Override
-    @GeneratedValue
-    public String toString() {
-        return String.format(
-            "Round{ roundId: %s\nwordtoGuess: %s\nmaxAttempts: %s\nroundActive: %s\ncurrentScore: %s\nmaxScore: %s\nscorePerLetter: %s\npenalty: %s\nallFeedback:\n%s",
-            roundId, wordToGuess, maxAttempts, roundActive, currentScore, maxScore, scorePerLetter, penalty, allFeedback
-        );
     }
 }

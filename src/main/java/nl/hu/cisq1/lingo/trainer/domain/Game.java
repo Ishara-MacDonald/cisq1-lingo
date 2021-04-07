@@ -1,10 +1,9 @@
 package nl.hu.cisq1.lingo.trainer.domain;
 
-import org.hibernate.loader.entity.plan.PaddedBatchingEntityLoader;
+import lombok.Data;
+import java.util.*;
 
-import java.util.ArrayList;
-import java.util.List;
-
+@Data
 public class Game {
     // region parameters
     private static int startWordLength = 5;
@@ -14,7 +13,7 @@ public class Game {
 
     private GameStatus gameStatus = GameStatus.WAITING_FOR_ROUND;
     private Long totalScore;
-    private int maxAttempts = 5;
+    private int maxAttempts;
 
     private List<Round> rounds = new ArrayList<>();
     //endregion
@@ -43,17 +42,15 @@ public class Game {
         }
     }
     public static void setNextGameId(int nextGameId) { Game.nextGameId = (long) nextGameId; }
-    public void setRounds(List<Round> rounds) { this.rounds = rounds; }
-
     //endregion
 
     //region getters
-    public List<Round> getRounds() { return rounds; }
-    public Long getGameId() { return gameId; }
+    public GameProgress getProgress(){
+        return new GameProgress(getCurrentRound());
+    }
     private Round getCurrentRound(){
         return rounds.get( rounds.size() -1 );
     }
-
     //endregion
 
     //endregion
@@ -83,10 +80,6 @@ public class Game {
             gameStatus = GameStatus.ELIMINATED;
         }
 
-    }
-
-    public GameProgress getProgress(){
-         return new GameProgress(getCurrentRound());
     }
 
     private int nextWordLength(){

@@ -1,10 +1,10 @@
 package nl.hu.cisq1.lingo.trainer.domain;
 
-import javax.persistence.GeneratedValue;
-import java.util.ArrayList;
-import java.util.Arrays;
-import java.util.List;
+import lombok.Data;
 
+import java.util.*;
+
+@Data
 public class Feedback {
     private String attempt;
     private final String word;
@@ -19,9 +19,6 @@ public class Feedback {
             this.hint = hint.firstHintOfRound(word);
         }
     }
-
-    public Hint getHint(){ return hint; }
-    public List<Mark> getMarks(){ return marks; }
 
     public void processAttempt(){
         generateMarks();
@@ -76,11 +73,5 @@ public class Feedback {
 
     public boolean isWordValid(){
         return attempt.length() == word.length();
-    }
-
-    @Override
-    @GeneratedValue
-    public String toString() {
-        return String.format("Feedback { marks: %s\nhint: %s}", marks, hint);
     }
 }

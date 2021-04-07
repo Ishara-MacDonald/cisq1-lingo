@@ -1,5 +1,10 @@
 package nl.hu.cisq1.lingo.trainer.domain;
 
+import lombok.Getter;
+import lombok.ToString;
+
+@Getter
+@ToString
 public enum Mark {
     CORRECT("CORRECT"),
     PRESENT("PRESENT"),
@@ -10,9 +15,5 @@ public enum Mark {
 
     Mark(String markName){
         this.markName = markName;
-    }
-
-    public String toString(){
-        return this.markName;
     }
 }
