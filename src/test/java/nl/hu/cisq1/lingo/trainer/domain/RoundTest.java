@@ -73,35 +73,6 @@ class RoundTest {
         //endregion maxAttempts
     //endregion allFeedback
 
-    //region calculateScore()
-
-    @Test
-    @DisplayName("maxScore increases the more letter the player has to guess")
-    void maxScoreIncrease(){
-        round.setWordToGuess("hi");
-        int lowerScore = round.getMaxScore();
-        round.setWordToGuess("hello");
-        int higherScore = round.getMaxScore();
-        assertTrue(lowerScore < higherScore);
-    }
-
-    @Test
-    @DisplayName("score gives back maxScore when first attempt is correct")
-    void scoreOnFirstCorrectAttempt(){
-        round.processAttempts("Hey");
-        assertEquals(round.getMaxScore(), round.getCurrentScore());
-    }
-
-    @Test
-    @DisplayName("Score gives back lower score than maxScore when second attempt is correct")
-    void scoreOnSecondCorrectAttempt(){
-        round.setMaxAttempts(5);
-        round.processAttempts("oio");
-        round.processAttempts("Hey");
-        assertTrue(round.getCurrentScore() < round.getMaxScore());
-    }
-    //endregion
-
     //region isRoundActive()
     @Test
     @DisplayName("Round is still active after ")

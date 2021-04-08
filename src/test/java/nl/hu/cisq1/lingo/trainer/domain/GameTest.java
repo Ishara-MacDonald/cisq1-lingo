@@ -18,7 +18,7 @@ class GameTest {
     @BeforeEach
     void setUp(){
         Game.setNextGameId(0);
-        game = new Game(5);
+        game = new Game();
     }
 
     @Test
@@ -30,7 +30,7 @@ class GameTest {
     @Test
     @DisplayName("A new Game gets a new gameId")
     void newGameIdGetsGenerated(){
-        Game secondGame = new Game(5);
+        Game secondGame = new Game();
         assertEquals(1, secondGame.getGameId());
     }
 

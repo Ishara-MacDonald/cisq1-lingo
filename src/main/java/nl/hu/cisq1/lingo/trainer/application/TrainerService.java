@@ -13,19 +13,18 @@ import java.util.Optional;
 
 @Service
 @Transactional
-public class GameService {
+public class TrainerService {
     private WordService wordService;
     private SpringGameRepository gameRepository;
 
-    public GameService(WordService wordService, SpringGameRepository gameRepository) {
+    public TrainerService(WordService wordService, SpringGameRepository gameRepository) {
         this.wordService = wordService;
         this.gameRepository = gameRepository;
     }
 
-    public GameProgress startNewGame(int maxAttempts){
-        Game game = new Game(maxAttempts);
-        String wordToGuess = wordService.provideRandomWord(game.nextWordLength());
-
+    public GameProgress startNewGame(){
+        Game game = new Game();
+        String wordToGuess = wordService.provideRandomWord(5);
         game.startNewRound(wordToGuess);
         gameRepository.save(game);
 
@@ -42,12 +41,15 @@ public class GameService {
         return game.getProgress();
     }
 
-    public void guess(String attempt){
-
+    public GameProgress guess(Long gameId, String guess){
+        Game game = getGameById(gameId);
+        game.guess(guess);
+        this.gameRepository.save(game);
+        return game.getProgress();
     }
 
-    public GameProgress getProgress(){
-        return null;
+    public GameProgress getProgress(Long gameId){
+        return getGameById(gameId).getProgress();
     }
 
     private Game getGameById(Long gameId){

@@ -10,7 +10,6 @@ import javax.persistence.Entity;
 import java.util.*;
 
 @Data
-@NoArgsConstructor
 @Entity
 public class Game {
     // region parameters
@@ -22,16 +21,14 @@ public class Game {
 
     private GameStatus gameStatus = GameStatus.WAITING_FOR_ROUND;
     private Long totalScore;
-    private int maxAttempts;
+    private int maxAttempts = 5;
 
     @OneToMany
     @JoinColumn
     @Cascade(CascadeType.ALL)
     private List<Round> rounds = new ArrayList<>();
     //endregion
-
-    public Game(int maxAttempts){
-        this.maxAttempts = maxAttempts;
+    public Game(){
         gameSetup();
     }
 
@@ -82,25 +79,22 @@ public class Game {
 
     public void updateGameStatus(){
         gameStatus = GameStatus.WAITING_FOR_ROUND;
+        if(getCurrentRound().isPlayerEliminated()){
+            gameStatus = GameStatus.ELIMINATED;
+        }
         for(Round round : rounds){
             if(round.isRoundActive()){
                 gameStatus = GameStatus.PLAYING;
                 break;
             }
         }
-        if(getCurrentRound().isPlayerEliminated()){
-            gameStatus = GameStatus.ELIMINATED;
-        }
-
     }
 
     public int nextWordLength(){
-        if(wordLength == 0) {
+        if(wordLength == 7)
             wordLength = 5;
-        }else if(wordLength == 7){
-            wordLength = 5;
-        }else
-            wordLength =+ 1;
+        else
+            wordLength = wordLength + 1;
         return wordLength;
     }
 }

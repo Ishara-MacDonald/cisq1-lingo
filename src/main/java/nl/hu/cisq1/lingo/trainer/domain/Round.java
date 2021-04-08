@@ -52,20 +52,16 @@ public class Round {
     }
 
     private void roundSetUp(){
-        calculateMaxScore();
-        calculatePentalty();
         setHints();
     }
 
     //region setters
     public void setWordToGuess(String wordToGuess) {
         this.wordToGuess = wordToGuess;
-        calculateMaxScore();
     }
 
     public void setMaxAttempts(int maxAttempts) {
         this.maxAttempts = maxAttempts;
-        calculatePentalty();
     }
 
     public void setHints(){
@@ -75,40 +71,21 @@ public class Round {
 
     public void addAttempt(String attempt){
         if(roundActive){
-            if(allFeedback.size() < maxAttempts){
-                processAttempts(attempt);
-            }else{
-                roundActive = false;
-                isPlayerEliminated = true;
-            }
+            processAttempts(attempt);
+        }
+        if(allFeedback.size() >= maxAttempts){
+            roundActive = false;
+            isPlayerEliminated = true;
         }
     }
 
     public void processAttempts(String attempt){
         if(attempt.equals(wordToGuess))
             roundActive = false;
-        else
-            calculateScore();
 
         Feedback feedback = new Feedback(wordToGuess, attempt, lastHint);
 
         lastHint = feedback.addAttempt( attempt );
         allFeedback.add( feedback );
-    }
-
-    public void calculateScore(){
-        currentScore -= penalty;
-    }
-
-    private void calculateMaxScore(){
-        maxScore = 0;
-        for(int index = 0; index < wordToGuess.length(); index++){
-            maxScore += scorePerLetter;
-        }
-        currentScore = maxScore;
-    }
-
-    private void calculatePentalty(){
-        penalty = maxScore / maxAttempts;
     }
 }
