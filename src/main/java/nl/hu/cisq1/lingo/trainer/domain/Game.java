@@ -1,20 +1,32 @@
 package nl.hu.cisq1.lingo.trainer.domain;
 
 import lombok.Data;
+import lombok.NoArgsConstructor;
+import org.hibernate.annotations.Cascade;
+import org.hibernate.annotations.CascadeType;
+
+import javax.persistence.*;
+import javax.persistence.Entity;
 import java.util.*;
 
 @Data
+@NoArgsConstructor
+@Entity
 public class Game {
     // region parameters
     private static int startWordLength = 5;
     private int wordLength = 5;
     private static Long nextGameId = 0L;
+    @Id
     private Long gameId;
 
     private GameStatus gameStatus = GameStatus.WAITING_FOR_ROUND;
     private Long totalScore;
     private int maxAttempts;
 
+    @OneToMany
+    @JoinColumn
+    @Cascade(CascadeType.ALL)
     private List<Round> rounds = new ArrayList<>();
     //endregion
 

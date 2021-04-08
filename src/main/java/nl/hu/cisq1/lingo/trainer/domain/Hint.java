@@ -4,13 +4,23 @@ import lombok.AllArgsConstructor;
 import lombok.Data;
 import lombok.NoArgsConstructor;
 
+import javax.persistence.*;
 import java.util.*;
 
 @Data
+@Entity
 @NoArgsConstructor
-@AllArgsConstructor
 public class Hint {
+    @Id
+    @GeneratedValue
+    private Long hintId;
+
+    @ElementCollection
     private List<String> hints = new ArrayList<>();
+
+    public Hint(List<String> hints){
+        this.hints = hints;
+    }
 
     public Hint firstHintOfRound(String word){
         String upperCaseWord = word.toUpperCase();
@@ -25,7 +35,7 @@ public class Hint {
         return new Hint(hints);
     }
 
-    public void processFeedbackIntoHints(List<Mark> marks, Hint hint, String wordToGuess){
+    public void processMarksIntoHints(List<Mark> marks, Hint hint, String wordToGuess){
         List<String> hintPerLetter = new ArrayList<>();
         boolean isFirstHint = hint.getHints().isEmpty();
 

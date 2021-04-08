@@ -1,16 +1,23 @@
 package nl.hu.cisq1.lingo.trainer.domain;
 
 import lombok.Data;
+import lombok.NoArgsConstructor;
+import org.hibernate.annotations.Cascade;
+import org.hibernate.annotations.CascadeType;
 
+import javax.persistence.*;
 import java.util.*;
 
 @Data
+@Entity
+@NoArgsConstructor
 public class Round {
 
     // region parameters
 
     private boolean roundActive = true;
-    private static Long nextId = 0L;
+    @Id
+    @GeneratedValue
     private Long roundId;
 
     // region scores
@@ -21,17 +28,18 @@ public class Round {
     //endregion
 
     // region attempts, word to Guess
-    private List<String> attempts = new ArrayList<>();
     private int maxAttempts;
-
     private String wordToGuess;
-
     private boolean isPlayerEliminated = false;
     //endregion
 
     // region feedback and hints
+    @OneToMany
+    @JoinColumn
+    @Cascade(CascadeType.ALL)
     private List<Feedback> allFeedback = new ArrayList<>();
-    private List<Hint> hints = new ArrayList<>();
+
+    @OneToOne
     private Hint lastHint = new Hint();
     //endregion
 
@@ -44,16 +52,12 @@ public class Round {
     }
 
     private void roundSetUp(){
-        setRoundId();
         calculateMaxScore();
         calculatePentalty();
         setHints();
     }
 
     //region setters
-    public static void setNextId(int id){ nextId = (long) id; }
-
-
     public void setWordToGuess(String wordToGuess) {
         this.wordToGuess = wordToGuess;
         calculateMaxScore();
@@ -64,21 +68,14 @@ public class Round {
         calculatePentalty();
     }
 
-    public void setRoundId() {
-        this.roundId = nextId;
-        nextId += 1L;
-    }
-
     public void setHints(){
         lastHint = lastHint.firstHintOfRound(wordToGuess);
-        hints.add(lastHint);
     }
     //endregion
 
     public void addAttempt(String attempt){
         if(roundActive){
             if(allFeedback.size() < maxAttempts){
-                attempts.add(attempt);
                 processAttempts(attempt);
             }else{
                 roundActive = false;
@@ -96,7 +93,6 @@ public class Round {
         Feedback feedback = new Feedback(wordToGuess, attempt, lastHint);
 
         lastHint = feedback.addAttempt( attempt );
-        hints.add(lastHint);
         allFeedback.add( feedback );
     }
 

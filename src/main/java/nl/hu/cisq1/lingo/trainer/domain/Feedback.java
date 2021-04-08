@@ -1,14 +1,26 @@
 package nl.hu.cisq1.lingo.trainer.domain;
 
 import lombok.Data;
+import lombok.NoArgsConstructor;
 
+import javax.persistence.*;
 import java.util.*;
 
 @Data
+@Entity
+@NoArgsConstructor
 public class Feedback {
+
+    @Id
+    @GeneratedValue
+    private Long feedbackId;
     private String attempt;
-    private final String word;
-    private final List<Mark> marks = new ArrayList<>();
+    private String word;
+
+    @ElementCollection
+    private List<Mark> marks = new ArrayList<>();
+
+    @OneToOne
     private Hint hint;
 
     public Feedback(String word, String attempt, Hint hint) {
@@ -32,7 +44,7 @@ public class Feedback {
     }
 
     public void giveHint(){
-        hint.processFeedbackIntoHints(marks, hint, word);
+        hint.processMarksIntoHints(marks, hint, word);
     }
 
     public void generateMarks(){

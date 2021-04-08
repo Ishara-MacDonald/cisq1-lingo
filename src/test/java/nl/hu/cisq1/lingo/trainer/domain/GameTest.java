@@ -18,7 +18,6 @@ class GameTest {
     @BeforeEach
     void setUp(){
         Game.setNextGameId(0);
-        Round.setNextId(0);
         game = new Game(5);
     }
 
@@ -45,9 +44,10 @@ class GameTest {
     @Test
     @DisplayName("getCurrentRound() should give the latest round")
     void getLatestRound(){
-        game.setRounds(List.of(new Round("", 2), new Round("", 2), new Round("", 2)));
+        Round mostRecentRound = new Round("", 2);
+        game.setRounds(List.of(new Round("", 2), new Round("", 2), mostRecentRound));
 
-        assertEquals(2, game.getProgress().getRoundId());
+        assertEquals(mostRecentRound, game.getProgress().getRound());
     }
 
     @ParameterizedTest

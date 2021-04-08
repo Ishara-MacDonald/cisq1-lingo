@@ -20,10 +20,11 @@ public class GameProgress {
     }
 
     private void setUp(){
-        longId = round.getRoundId();
         isActive = round.isRoundActive();
         roundFeedback = round.getAllFeedback();
-        attempts = round.getAttempts();
+        for(Feedback feedback : round.getAllFeedback()){
+            attempts.add(feedback.getAttempt());
+        }
     }
     //endregion
 

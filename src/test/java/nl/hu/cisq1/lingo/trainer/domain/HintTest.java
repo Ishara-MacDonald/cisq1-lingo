@@ -4,7 +4,6 @@ import org.junit.jupiter.api.*;
 import org.junit.jupiter.params.ParameterizedTest;
 import org.junit.jupiter.params.provider.*;
 
-import java.util.ArrayList;
 import java.util.List;
 import java.util.stream.Stream;
 
@@ -28,7 +27,7 @@ public class HintTest {
     @MethodSource({"provideIsFirstHintExamples"})
     @DisplayName("Testing isFirstHint results with absent and correct marks.")
     void testingIsFirstHint(Hint hint, List<Mark> marks, List<String> expectedResult){
-        hint.processFeedbackIntoHints(marks, hint, wordToGuess);
+        hint.processMarksIntoHints(marks, hint, wordToGuess);
         assertEquals(expectedResult, hint.getHints());
     }
 

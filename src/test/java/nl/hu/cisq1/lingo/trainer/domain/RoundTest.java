@@ -14,24 +14,8 @@ class RoundTest {
     Round round;
     @BeforeEach
     void setUp(){
-        Round.setNextId(0);
         round = new Round("Hey", 2);
     }
-
-    //region Tests for RoundId
-    @Test
-    @DisplayName("Creating a Round automatically sets the roundId")
-    void roundIdIsMade(){
-        assertEquals(0, round.getRoundId());
-    }
-
-    @Test
-    @DisplayName("A new round gets a new roundId")
-    void roundIdGetsGenerated(){
-        Round secondRound = new Round("", 2);
-        assertEquals(1, secondRound.getRoundId());
-    }
-    //endregion
 
     //region Tests for List<Feedback> allFeedback
     @Test
