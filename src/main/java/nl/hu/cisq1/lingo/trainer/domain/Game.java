@@ -15,7 +15,7 @@ import java.util.*;
 public class Game {
     // region parameters
     private static int startWordLength = 5;
-    private int wordLength = 5;
+    private int wordLength;
     private static Long nextGameId = 0L;
     @Id
     private Long gameId;
@@ -94,8 +94,13 @@ public class Game {
 
     }
 
-    private int nextWordLength(){
-        wordLength += 1;
+    public int nextWordLength(){
+        if(wordLength == 0) {
+            wordLength = 5;
+        }else if(wordLength == 7){
+            wordLength = 5;
+        }else
+            wordLength =+ 1;
         return wordLength;
     }
 }
