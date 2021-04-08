@@ -90,8 +90,7 @@ class TrainerServiceTest {
                 Arguments.of(List.of("baard"), List.of("B", "A", "A", "R", "D"), GameStatus.WAITING_FOR_ROUND),
                 Arguments.of(List.of("beren"), List.of("B", ".", ".", ".", "."), GameStatus.PLAYING),
                 Arguments.of(List.of("braad"), List.of("B", ".", "A", ".", "D"), GameStatus.PLAYING),
-                Arguments.of(List.of("beren", "braad"),
-                        List.of("B", ".", "A", ".", "D"), GameStatus.ELIMINATED)
+                Arguments.of(List.of("beren", "braad"), List.of("B", ".", "A", ".", "D"), GameStatus.ELIMINATED)
         );
     }
 }

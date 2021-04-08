@@ -48,6 +48,10 @@ public class TrainerService {
         return game.getProgress();
     }
 
+    public void save(Game game){
+        gameRepository.save(game);
+    }
+
     public GameProgress getProgress(Long gameId){
         return getGameById(gameId).getProgress();
     }
