@@ -55,8 +55,9 @@ public class Game {
 
     //region getters
     public GameProgress getProgress(){
-        return new GameProgress(getCurrentRound());
+        return new GameProgress(this, getCurrentRound());
     }
+
     private Round getCurrentRound(){
         return rounds.get( rounds.size() -1 );
     }

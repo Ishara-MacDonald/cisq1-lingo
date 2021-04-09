@@ -47,7 +47,7 @@ class GameTest {
         Round mostRecentRound = new Round("", 2);
         game.setRounds(List.of(new Round("", 2), new Round("", 2), mostRecentRound));
 
-        assertEquals(mostRecentRound, game.getProgress().getRound());
+        assertEquals(mostRecentRound, game.getRounds().get(game.getRounds().size() - 1 ));
     }
 
     @ParameterizedTest
@@ -76,7 +76,7 @@ class GameTest {
     @DisplayName("When Round is created, First letter of the wordToGuess should be showed.")
     void showHintWhenRoundCreated(){
         game.startNewRound("shirt");
-        assertEquals(List.of("S", ".", ".", ".", "."), game.getProgress().getRound().getLastHint().getHints());
+        assertEquals(new Hint(List.of("S", ".", ".", ".", ".")), game.getProgress().getHint());
     }
 
     @ParameterizedTest

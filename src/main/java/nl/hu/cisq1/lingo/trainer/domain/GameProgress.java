@@ -8,30 +8,24 @@ import java.util.List;
 @Getter
 public class GameProgress {
     //region parameters
-    public Round round;
-    public long longId;
-    public boolean isActive;
+    public Long gameID;
+    public GameStatus gameStatus;
     public List<Feedback> roundFeedback;
-    public List<String> attempts = new ArrayList<>();
+    public Hint hint;
+    public int attemptsLeft;
 
     //endregion
 
     //region setUp
-    public GameProgress(Round round){
-        this.round = round;
-        setUp();
-    }
+    public GameProgress(Game game, Round round){
+        gameID = game.getGameId();
+        gameStatus = game.getGameStatus();
+        hint = round.getLastHint();
 
-    private void setUp(){
-        isActive = round.isRoundActive();
+//        isActive = round.isRoundActive();
         roundFeedback = round.getAllFeedback();
-        for(Feedback feedback : round.getAllFeedback()){
-            attempts.add(feedback.getAttempt());
-        }
-    }
 
-    public Hint getHint(){
-        return round.getLastHint();
+        attemptsLeft = game.getMaxAttempts() - roundFeedback.size();
     }
     //endregion
 }

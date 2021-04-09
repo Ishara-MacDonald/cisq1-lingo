@@ -40,6 +40,7 @@ public class Round {
     private List<Feedback> allFeedback = new ArrayList<>();
 
     @OneToOne
+    @Cascade(CascadeType.ALL)
     private Hint lastHint = new Hint();
     //endregion
 

@@ -34,7 +34,7 @@ class TrainerServiceTest {
         GameProgress progress = trainerService.startNewGame();
 
         assertEquals(new Hint(List.of("B", ".", ".",".", ".")), progress.getHint());
-        assertTrue(progress.isActive());
+        assertEquals(GameStatus.PLAYING, progress.getGameStatus());
     }
 
     @Test
@@ -57,7 +57,7 @@ class TrainerServiceTest {
         GameProgress progress = trainerService.startNewRound(0L);
 
         assertEquals(new Hint(List.of("H", ".", "." , "." , "." , ".")), progress.getHint());
-        assertTrue(progress.isActive());
+        assertEquals(GameStatus.PLAYING, progress.getGameStatus());
     }
 
     @ParameterizedTest
