@@ -8,11 +8,12 @@ import java.util.List;
 @Getter
 public class GameProgress {
     //region parameters
-    public Long gameID;
-    public GameStatus gameStatus;
-    public List<Feedback> roundFeedback;
-    public Hint hint;
-    public int attemptsLeft;
+    private Long gameID;
+    private GameStatus gameStatus;
+    private List<Feedback> roundFeedback;
+    private Hint hint;
+    private List<Mark> marks;
+    private int attemptsLeft;
 
     //endregion
 

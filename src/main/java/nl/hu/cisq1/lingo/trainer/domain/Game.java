@@ -58,6 +58,10 @@ public class Game {
         return new GameProgress(this, getCurrentRound());
     }
 
+    public String getWord(){
+        return getCurrentRound().getWordToGuess();
+    }
+
     private Round getCurrentRound(){
         return rounds.get( rounds.size() -1 );
     }

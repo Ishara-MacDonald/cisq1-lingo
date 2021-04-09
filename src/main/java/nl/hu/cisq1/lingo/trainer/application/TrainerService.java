@@ -4,6 +4,7 @@ import nl.hu.cisq1.lingo.trainer.data.SpringGameRepository;
 import nl.hu.cisq1.lingo.trainer.domain.Game;
 import nl.hu.cisq1.lingo.trainer.domain.GameProgress;
 import nl.hu.cisq1.lingo.trainer.domain.GameStatus;
+import nl.hu.cisq1.lingo.trainer.presentation.dto.ProgressResponseDTO;
 import nl.hu.cisq1.lingo.words.application.WordService;
 
 import org.springframework.stereotype.Service;
@@ -45,7 +46,13 @@ public class TrainerService {
         Game game = getGameById(gameId);
         game.guess(guess);
         this.gameRepository.save(game);
+
         return game.getProgress();
+    }
+
+    public void showWord(Long gameId, ProgressResponseDTO progressDTO){
+        Game game = getGameById(gameId);
+        progressDTO.setWord(game.getWord());
     }
 
     public void save(Game game){

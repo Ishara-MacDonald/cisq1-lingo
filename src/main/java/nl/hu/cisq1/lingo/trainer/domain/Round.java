@@ -74,7 +74,7 @@ public class Round {
         if(roundActive){
             processAttempts(attempt);
         }
-        if(allFeedback.size() >= maxAttempts){
+        if(allFeedback.size() >= maxAttempts && !attempt.equals(wordToGuess)){
             roundActive = false;
             isPlayerEliminated = true;
         }
