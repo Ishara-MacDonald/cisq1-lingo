@@ -32,17 +32,24 @@ public class TrainerService {
         return game.getProgress();
     }
 
-    public GameProgress startNewRound(Long id){
+    public GameProgress startNewRound(Long id) throws Exception{
         Game game = getGameById(id);
         String wordToGuess = wordService.provideRandomWord(game.nextWordLength());
+        if(game.getGameStatus().equals(GameStatus.PLAYING)){
+            throw new Exception("is bad request");
+        }
         game.startNewRound(wordToGuess);
         this.gameRepository.save(game);
 
         return game.getProgress();
     }
 
-    public GameProgress guess(Long gameId, String guess){
+    public GameProgress guess(Long gameId, String guess) throws Exception{
         Game game = getGameById(gameId);
+
+        if(game.getGameStatus().equals(GameStatus.ELIMINATED)){
+            throw new Exception("player is eliminated");
+        }
         game.guess(guess);
         this.gameRepository.save(game);
 

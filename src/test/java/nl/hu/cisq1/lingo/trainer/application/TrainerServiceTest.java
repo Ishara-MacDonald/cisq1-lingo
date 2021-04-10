@@ -39,7 +39,7 @@ class TrainerServiceTest {
 
     @Test
     @DisplayName("Starting a new Round")
-    void startNewRound(){
+    void startNewRound() throws Exception{
         WordService wordService = mock(WordService.class);
         when(wordService.provideRandomWord(6))
                 .thenReturn("hoeden");
@@ -63,7 +63,7 @@ class TrainerServiceTest {
     @ParameterizedTest
     @MethodSource("providingGuesses")
     @DisplayName("testing taking guesses and its outcome")
-    void guess(List<String> guesses, List<String> expectedHints, GameStatus expectedGameStatus){
+    void guess(List<String> guesses, List<String> expectedHints, GameStatus expectedGameStatus) throws Exception{
         WordService wordService = mock(WordService.class);
 
         Game game = new Game();

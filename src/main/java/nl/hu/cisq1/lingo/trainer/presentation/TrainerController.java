@@ -29,14 +29,14 @@ public class TrainerController {
     }
 
     @PostMapping("/games/{id}/newRound")
-    public ProgressResponseDTO startNewRound(@PathVariable Long id){
-        GameProgress progress;
+    public ProgressResponseDTO startNewRound(@PathVariable Long id) throws Exception{
         try{
-            progress = this.service.startNewRound(id);
+            return convertProgressToDTO(this.service.startNewRound(id));
         }catch(IllegalArgumentException exception){
             throw new ResponseStatusException(HttpStatus.NOT_FOUND, exception.getMessage());
+        }catch(Exception exception){
+            throw new ResponseStatusException(HttpStatus.BAD_REQUEST, exception.getMessage());
         }
-        return convertProgressToDTO(progress);
     }
 
     @PostMapping("/games/{id}/{guess}")
@@ -50,6 +50,8 @@ public class TrainerController {
             return progressDTO;
         }catch(IllegalArgumentException exception){
             throw new ResponseStatusException(HttpStatus.NOT_FOUND, exception.getMessage());
+        }catch(Exception exception){
+            throw new ResponseStatusException(HttpStatus.BAD_REQUEST, exception.getMessage());
         }
     }
 
@@ -70,7 +72,6 @@ public class TrainerController {
                 feedbackResponseDTOs.add(new FeedbackResponseDTO(feedback.getAttempt(), feedback.getMarks()));
             }
         }
-        System.out.println(feedbackResponseDTOs);
 
         return new ProgressResponseDTO(progress.getGameID(), progress.getGameStatus(), feedbackResponseDTOs, progress.getHint(), progress.getAttemptsLeft());
     }

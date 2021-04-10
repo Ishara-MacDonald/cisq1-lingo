@@ -29,8 +29,6 @@ import static org.mockito.Mockito.when;
 @SpringBootTest
 @AutoConfigureMockMvc
 public class TrainerControllerIntegrationTest {
-    private static final Predicate<String> WORD_EXISTS = x -> true;
-
     @MockBean
     private SpringWordRepository wordRepository;
     @MockBean
@@ -55,7 +53,8 @@ public class TrainerControllerIntegrationTest {
                 .andExpect(jsonPath("$.gameStatus", is("PLAYING")))
                 .andExpect(jsonPath("$.hint", hasSize(5)))
                 .andExpect(jsonPath("$.hint", containsInRelativeOrder(expectedHint)))
-                .andExpect(jsonPath("$.attemptsLeft", is(5)));
+                .andExpect(jsonPath("$.attemptsLeft", is(5)))
+                .andExpect(jsonPath("$.roundFeedback", hasSize(0)));
     }
 
     @Test
@@ -70,7 +69,6 @@ public class TrainerControllerIntegrationTest {
         when(wordRepository.findRandomWordByLength(6))
                 .thenReturn(Optional.of(new Word("hoeden")));
 
-        // games/{id}/newRound
         RequestBuilder request = MockMvcRequestBuilders.post("/trainer/games/0/newRound");
 
         String[] expectedHint = {"H", ".", ".", ".", ".", "."};
@@ -80,7 +78,8 @@ public class TrainerControllerIntegrationTest {
                 .andExpect(jsonPath("$.gameStatus", is("PLAYING")))
                 .andExpect(jsonPath("$.hint", hasSize(6)))
                 .andExpect(jsonPath("$.hint", containsInRelativeOrder(expectedHint)))
-                .andExpect(jsonPath("$.attemptsLeft", is(5)));
+                .andExpect(jsonPath("$.attemptsLeft", is(5)))
+                .andExpect(jsonPath("$.roundFeedback", hasSize(0)));
     }
 
     @Test
@@ -110,24 +109,45 @@ public class TrainerControllerIntegrationTest {
                 .andExpect(status().isBadRequest());
     }
 
-    /*@Test
+    @Test
     @DisplayName("taking a guess")
     void guess() throws Exception{
+        Game game = new Game();
+        game.startNewRound("baard");
+
+        when(gameRepository.findById(anyLong()))
+                .thenReturn(Optional.of(game));
         when(wordRepository.findRandomWordByLength(5))
                 .thenReturn(Optional.of(new Word("baard")));
 
-        RequestBuilder requestGame = MockMvcRequestBuilders.post("/trainer/games");
+        RequestBuilder requestGuess = MockMvcRequestBuilders.post("/trainer/games/0/boord");
 
-        String guess = "boord";
-        RequestBuilder requestGuess = MockMvcRequestBuilders.post("/trainer/games/newRound");
+        String[] expectedHints = {"B",".",".","R","D"};
 
-        mockMvc.perform(requestGame);
         mockMvc.perform(requestGuess)
                 .andExpect(status().isOk())
                 .andExpect(jsonPath("$.gameStatus", is("PLAYING")))
                 .andExpect(jsonPath("$.hint", hasSize(5)))
+                .andExpect(jsonPath("$.hint", containsInRelativeOrder(expectedHints)))
                 .andExpect(jsonPath("$.attemptsLeft", is(4)))
-                .andExpect(jsonPath("$.feedbackHistory", hasSize(1)));
-    }*/
+                .andExpect(jsonPath("$.roundFeedback", hasSize(1)));
+    }
 
+    @Test
+    @DisplayName("cannot take a guess when player is eliminated")
+    void cannotGuessWhenEliminated() throws Exception{
+        Game game = new Game();
+        game.setMaxAttempts(2);
+        game.startNewRound("baard");
+        game.guess("boord");
+        game.guess("boord");
+
+        when(gameRepository.findById(anyLong()))
+                .thenReturn(Optional.of(game));
+
+        RequestBuilder requestGuess = MockMvcRequestBuilders.post("/trainer/games/0/boord");
+
+        mockMvc.perform(requestGuess)
+                .andExpect(status().isBadRequest());
+    }
 }
