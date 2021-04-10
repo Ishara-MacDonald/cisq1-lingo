@@ -35,7 +35,6 @@ public class TrainerService {
     public GameProgress startNewRound(Long id){
         Game game = getGameById(id);
         String wordToGuess = wordService.provideRandomWord(game.nextWordLength());
-
         game.startNewRound(wordToGuess);
         this.gameRepository.save(game);
 

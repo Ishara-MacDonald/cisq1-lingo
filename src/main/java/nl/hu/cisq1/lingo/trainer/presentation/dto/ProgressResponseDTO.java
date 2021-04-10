@@ -4,6 +4,7 @@ import nl.hu.cisq1.lingo.trainer.domain.GameStatus;
 import nl.hu.cisq1.lingo.trainer.domain.Hint;
 import org.springframework.hateoas.RepresentationModel;
 
+import java.util.ArrayList;
 import java.util.List;
 
 public class ProgressResponseDTO extends RepresentationModel<ProgressResponseDTO> {
@@ -18,6 +19,10 @@ public class ProgressResponseDTO extends RepresentationModel<ProgressResponseDTO
         this.gameID = gameID;
         this.gameStatus = gameStatus;
         this.roundFeedback = feedback;
+
+        if(feedback.isEmpty()){
+            this.roundFeedback = new ArrayList<>();
+        }
         this.hint = hint.getHints();
         this.attemptsLeft = attemptsLeft;
     }

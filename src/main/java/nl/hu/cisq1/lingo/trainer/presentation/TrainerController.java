@@ -30,11 +30,13 @@ public class TrainerController {
 
     @PostMapping("/games/{id}/newRound")
     public ProgressResponseDTO startNewRound(@PathVariable Long id){
+        GameProgress progress;
         try{
-            return convertProgressToDTO(this.service.startNewRound(id));
+            progress = this.service.startNewRound(id);
         }catch(IllegalArgumentException exception){
             throw new ResponseStatusException(HttpStatus.NOT_FOUND, exception.getMessage());
         }
+        return convertProgressToDTO(progress);
     }
 
     @PostMapping("/games/{id}/{guess}")
@@ -68,6 +70,7 @@ public class TrainerController {
                 feedbackResponseDTOs.add(new FeedbackResponseDTO(feedback.getAttempt(), feedback.getMarks()));
             }
         }
+        System.out.println(feedbackResponseDTOs);
 
         return new ProgressResponseDTO(progress.getGameID(), progress.getGameStatus(), feedbackResponseDTOs, progress.getHint(), progress.getAttemptsLeft());
     }
